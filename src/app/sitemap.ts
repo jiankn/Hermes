@@ -1,28 +1,15 @@
 import type { MetadataRoute } from 'next';
+import { getArticles, type ContentType } from '@/lib/content';
+
+const baseUrl = 'https://hermesagent.sbs';
+const locales = ['en', 'zh'] as const;
+const contentTypes: ContentType[] = ['tutorials', 'guides', 'blog'];
+const staticPages = ['', '/tutorials', '/guides', '/blog', '/learning-path', '/faq', '/about', '/contact', '/privacy', '/terms'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://hermesagent.sbs';
-  const locales = ['en', 'zh'];
   const now = new Date();
-
-  const staticPages = ['', '/tutorials', '/guides', '/blog', '/learning-path', '/faq', '/about'];
-
-  const tutorialSlugs = [
-    'getting-started/installation',
-    'getting-started/first-conversation',
-    'getting-started/choosing-a-model',
-    'getting-started/cli-essentials',
-    'messaging/telegram-bot-setup',
-    'messaging/discord-integration',
-    'skills/install-community-skills',
-    'skills/create-custom-skills',
-    'automation/cron-scheduling',
-    'advanced/multi-agent-orchestration',
-  ];
-
   const entries: MetadataRoute.Sitemap = [];
 
-  // Static pages
   for (const locale of locales) {
     for (const page of staticPages) {
       entries.push({
@@ -40,21 +27,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  // Tutorial pages
-  for (const locale of locales) {
-    for (const slug of tutorialSlugs) {
-      entries.push({
-        url: `${baseUrl}/${locale}/tutorials/${slug}`,
-        lastModified: now,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-        alternates: {
-          languages: {
-            en: `${baseUrl}/en/tutorials/${slug}`,
-            zh: `${baseUrl}/zh/tutorials/${slug}`,
+  for (const type of contentTypes) {
+    const localizedArticles = Object.fromEntries(
+      locales.map((locale) => [locale, getArticles(type, locale)])
+    ) as Record<(typeof locales)[number], ReturnType<typeof getArticles>>;
+
+    for (const locale of locales) {
+      for (const article of localizedArticles[locale]) {
+        if (!article.urlPath) {
+          continue;
+        }
+
+        const languages = Object.fromEntries(
+          locales
+            .filter((candidate) => localizedArticles[candidate].some((entry) => entry.urlPath === article.urlPath))
+            .map((candidate) => [candidate, `${baseUrl}/${candidate}/${type}/${article.urlPath}`])
+        );
+
+        entries.push({
+          url: `${baseUrl}/${locale}/${type}/${article.urlPath}`,
+          lastModified: article.updatedAt || article.publishedAt || now,
+          changeFrequency: type === 'blog' ? 'monthly' : 'weekly',
+          priority: type === 'tutorials' ? 0.7 : 0.6,
+          alternates: {
+            languages,
           },
-        },
-      });
+        });
+      }
     }
   }
 

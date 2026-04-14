@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { getArticleBySlug, getAllSlugs } from '@/lib/content';
 import { routing } from '@/i18n/routing';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
+import { buildArticleJsonLd, buildBreadcrumbJsonLd, serializeJsonLd } from '@/lib/seo/schema';
+import { extractHeadings, renderMarkdown } from '@/lib/article-render';
+import { getRelatedArticles } from '@/lib/related-articles';
 import styles from './page.module.css';
 import type { Metadata } from 'next';
 
@@ -54,69 +57,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Simple MDX-to-HTML renderer for headings extraction
-function extractHeadings(content: string): { id: string; text: string; level: number }[] {
-  const headingRegex = /^(#{2,3})\s+(.+)$/gm;
-  const headings: { id: string; text: string; level: number }[] = [];
-  let match;
-  while ((match = headingRegex.exec(content)) !== null) {
-    const text = match[2].trim();
-    const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-    headings.push({ id, text, level: match[1].length });
-  }
-  return headings;
-}
-
-// Simple markdown to HTML (basic)
-function renderMarkdown(content: string): string {
-  let html = content;
-
-  // Code blocks
-  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
-
-  // Blockquotes
-  html = html.replace(/^>\s?\*\*(.+?)\*\*:\s*(.+)$/gm, '<blockquote><p><strong>$1:</strong> $2</p></blockquote>');
-  html = html.replace(/^>\s*(.+)$/gm, '<blockquote><p>$1</p></blockquote>');
-
-  // Headings with IDs
-  html = html.replace(/^### (.+)$/gm, (_, text) => {
-    const id = text.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-    return `<h3 id="${id}">${text}</h3>`;
-  });
-  html = html.replace(/^## (.+)$/gm, (_, text) => {
-    const id = text.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-    return `<h2 id="${id}">${text}</h2>`;
-  });
-
-  // Bold / Italic
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-  // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-  // Lists
-  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-
-  // Numbered lists
-  html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
-
-  // Horizontal rules
-  html = html.replace(/^---$/gm, '<hr>');
-
-  // Paragraphs
-  html = html.replace(/^(?!<[a-z])((?!^\s*$).+)$/gm, '<p>$1</p>');
-
-  // Clean up empty paragraphs
-  html = html.replace(/<p>\s*<\/p>/g, '');
-
-  return html;
-}
-
 export default async function TutorialArticlePage({ params }: Props) {
   const { locale, slug } = await params;
   const article = getArticleBySlug('tutorials', slug, locale);
@@ -125,13 +65,43 @@ export default async function TutorialArticlePage({ params }: Props) {
 
   const isZh = locale === 'zh';
   const title = isZh ? article.meta.titleZh : article.meta.title;
+  const description = isZh ? article.meta.descriptionZh : article.meta.description;
   const headings = extractHeadings(article.content);
   const htmlContent = renderMarkdown(article.content);
+  const urlPath = slug.join('/');
+  const relatedArticles = getRelatedArticles('tutorials', locale, urlPath, article.meta.category);
+  const structuredData = serializeJsonLd([
+    buildBreadcrumbJsonLd({
+      baseUrl: 'https://hermesagent.sbs',
+      locale,
+      type: 'tutorials',
+      title,
+      urlPath,
+    }),
+    buildArticleJsonLd({
+      baseUrl: 'https://hermesagent.sbs',
+      locale,
+      type: 'tutorials',
+      title,
+      description,
+      urlPath,
+      publishedAt: article.meta.publishedAt,
+      updatedAt: article.meta.updatedAt,
+      author: article.meta.author,
+      category: article.meta.category,
+      tags: article.meta.tags,
+    }),
+  ]);
 
   const difficultyLabels = { beginner: isZh ? '入门' : 'Beginner', intermediate: isZh ? '中级' : 'Intermediate', advanced: isZh ? '高级' : 'Advanced' };
 
   return (
     <div className={styles.articlePage}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: structuredData }}
+      />
+
       {/* Breadcrumb */}
       <nav className={styles.breadcrumb} aria-label="Breadcrumb">
         <Link href={`/${locale}`}>{isZh ? '首页' : 'Home'}</Link>
@@ -182,8 +152,13 @@ export default async function TutorialArticlePage({ params }: Props) {
           <div className={styles.sidebarSection}>
             <h4 className={styles.tocTitle}>{isZh ? '相关推荐' : 'Related'}</h4>
             <ul className={styles.relatedList}>
-              <li><Link href={`/${locale}/tutorials/getting-started/first-conversation`} className={styles.relatedLink}>{isZh ? '第一次对话' : 'First Conversation'}</Link></li>
-              <li><Link href={`/${locale}/tutorials/getting-started/choosing-a-model`} className={styles.relatedLink}>{isZh ? '选择模型' : 'Choosing a Model'}</Link></li>
+              {relatedArticles.map((entry) => (
+                <li key={entry.urlPath}>
+                  <Link href={`/${locale}/tutorials/${entry.urlPath}`} className={styles.relatedLink}>
+                    {isZh ? entry.titleZh : entry.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </aside>

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -16,7 +15,6 @@ const days = [
 
 export default async function LearningPathPage({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale });
   const isZh = locale === 'zh';
 
   return (

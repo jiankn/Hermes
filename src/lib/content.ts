@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
+export type ContentType = 'tutorials' | 'guides' | 'blog';
 
 export interface ArticleMeta {
   title: string;
@@ -20,6 +21,10 @@ export interface ArticleMeta {
   series?: string;
   seriesOrder?: number;
   featured?: boolean;
+  urlPath?: string;
+  slugSegments?: string[];
+  locale?: string;
+  type?: ContentType;
 }
 
 export interface Article {
@@ -43,7 +48,7 @@ function getAllMdxFiles(dir: string): string[] {
 }
 
 export function getArticles(
-  type: 'tutorials' | 'guides' | 'blog',
+  type: ContentType,
   locale: string
 ): ArticleMeta[] {
   const dir = path.join(CONTENT_DIR, type, locale);
@@ -53,7 +58,14 @@ export function getArticles(
     .map((filePath) => {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const { data } = matter(raw);
-      return data as ArticleMeta;
+      const urlPath = path.relative(dir, filePath).replace(/\.mdx$/, '').split(path.sep).join('/');
+      return {
+        ...(data as ArticleMeta),
+        urlPath,
+        slugSegments: urlPath.split('/'),
+        locale,
+        type,
+      };
     })
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 }
@@ -78,7 +90,7 @@ export function getArticleBySlug(
 }
 
 export function getAllSlugs(
-  type: 'tutorials' | 'guides' | 'blog',
+  type: ContentType,
   locale: string
 ): string[][] {
   const dir = path.join(CONTENT_DIR, type, locale);
