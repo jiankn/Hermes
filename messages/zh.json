@@ -1,0 +1,91 @@
+{
+  "site": {
+    "title": "Hermes Agent 学习社区",
+    "description": "Hermes Agent 一站式学习社区 — 从安装到多 Agent 协作的完整知识库。",
+    "tagline": "从零基础到 AI 自动化专家"
+  },
+  "nav": {
+    "tutorials": "教程",
+    "guides": "指南",
+    "blog": "博客",
+    "learningPath": "学习路径",
+    "faq": "常见问题",
+    "about": "关于",
+    "search": "搜索",
+    "language": "语言"
+  },
+  "hero": {
+    "title": "掌握 Hermes Agent",
+    "subtitle": "从零基础到 AI 自动化专家",
+    "description": "Hermes Agent 一站式学习社区 — GitHub 74.9k+ ⭐ 的自进化 AI Agent 完整知识库",
+    "ctaPrimary": "开始学习",
+    "ctaSecondary": "浏览教程"
+  },
+  "features": {
+    "title": "为什么选择 Hermes Agent？",
+    "selfLearning": {
+      "title": "自学习闭环",
+      "description": "自动从使用经验中创建技能、持续改进，并构建对你的深度画像。"
+    },
+    "deployAnywhere": {
+      "title": "随处部署",
+      "description": "通过 Telegram、Discord 或 CLI 与它对话，后台安静运行在 $5 VPS 或 Modal 无服务器平台。"
+    },
+    "multiAgent": {
+      "title": "多 Agent 编排",
+      "description": "生成隔离的子 Agent 处理并行工作流，Host 统一调度，天然物理隔离。"
+    }
+  },
+  "footer": {
+    "community": "社区",
+    "resources": "资源",
+    "legal": "法律",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "contact": "联系我们",
+    "copyright": "© 2026 Hermes Agent 学习社区。保留所有权利。",
+    "github": "GitHub",
+    "discord": "Discord",
+    "twitter": "Twitter"
+  },
+  "common": {
+    "readMore": "阅读更多",
+    "viewAll": "查看全部",
+    "minutes": "分钟阅读",
+    "beginner": "入门",
+    "intermediate": "中级",
+    "advanced": "高级",
+    "publishedAt": "发布于",
+    "updatedAt": "更新于",
+    "author": "作者",
+    "backToTop": "回到顶部"
+  },
+  "newsletter": {
+    "title": "订阅更新",
+    "description": "获取最新的 Hermes Agent 教程和技巧，直接送达你的邮箱。不发垃圾邮件，随时退订。",
+    "placeholder": "your@email.com",
+    "button": "订阅"
+  },
+  "socialProof": {
+    "stars": "GitHub Stars",
+    "forks": "Forks",
+    "models": "支持模型",
+    "platforms": "平台"
+  },
+  "faqItems": {
+    "q1": "Hermes Agent 是什么？",
+    "a1": "Hermes Agent 是由 Nous Research 开发的开源自进化 AI Agent。它能从经验中学习、自主创建技能，并通过 Telegram、Discord 和命令行进行交互。",
+    "q2": "需要什么硬件？",
+    "a2": "Hermes Agent 本身非常轻量——可以运行在任何 Linux 服务器、macOS、WSL2，甚至 Android Termux 上。AI 模型通过 API 远程运行，不需要 GPU。",
+    "q3": "支持哪些 AI 模型？",
+    "a3": "支持 200+ 模型，包括 GPT-4、Claude、Llama、Mistral 以及任何 OpenAI 兼容 API。你可以随时切换模型。",
+    "q4": "多 Agent 协作怎么玩？",
+    "a4": "Hermes 可以生成隔离的子 Agent 处理并行任务。每个子 Agent 有独立的上下文，可以独立运行，由 Host 统一调度。",
+    "q5": "我的数据安全吗？",
+    "a5": "完全安全。Hermes 运行在你自己的服务器上，对话和数据不会发送给第三方（除了你选择的 AI 模型 API）。"
+  },
+  "latestTutorials": {
+    "title": "最新教程",
+    "viewAll": "查看全部 →"
+  }
+}

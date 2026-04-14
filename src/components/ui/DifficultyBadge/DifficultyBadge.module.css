@@ -1,0 +1,24 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 0.25rem;
+}
+
+.beginner {
+  background: var(--badge-beginner-bg);
+  color: var(--badge-beginner-text);
+}
+
+.intermediate {
+  background: var(--badge-intermediate-bg);
+  color: var(--badge-intermediate-text);
+}
+
+.advanced {
+  background: var(--badge-advanced-bg);
+  color: var(--badge-advanced-text);
+}

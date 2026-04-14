@@ -1,0 +1,91 @@
+{
+  "site": {
+    "title": "Hermes Agent Community",
+    "description": "The definitive learning hub for Hermes Agent — from first install to multi-agent orchestration.",
+    "tagline": "From Zero to AI Automation Expert"
+  },
+  "nav": {
+    "tutorials": "Tutorials",
+    "guides": "Guides",
+    "blog": "Blog",
+    "learningPath": "Learning Path",
+    "faq": "FAQ",
+    "about": "About",
+    "search": "Search",
+    "language": "Language"
+  },
+  "hero": {
+    "title": "Master Hermes Agent",
+    "subtitle": "From Zero to AI Automation Expert",
+    "description": "The definitive learning community for Hermes Agent — the self-improving AI agent with 74.9k+ GitHub stars.",
+    "ctaPrimary": "Start Learning",
+    "ctaSecondary": "Browse Tutorials"
+  },
+  "features": {
+    "title": "Why Hermes Agent?",
+    "selfLearning": {
+      "title": "Self-Learning Loop",
+      "description": "Automatically creates skills from experience, improves them during use, and builds a deepening model of who you are."
+    },
+    "deployAnywhere": {
+      "title": "Deploy Anywhere",
+      "description": "Talk to it from Telegram, Discord, or CLI while it runs silently on a $5 VPS or Modal serverless infrastructure."
+    },
+    "multiAgent": {
+      "title": "Multi-Agent Orchestration",
+      "description": "Spawn isolated sub-agents for parallel workstreams. The host unifies scheduling natively and safely."
+    }
+  },
+  "footer": {
+    "community": "Community",
+    "resources": "Resources",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "copyright": "© 2026 Hermes Agent Community. All rights reserved.",
+    "github": "GitHub",
+    "discord": "Discord",
+    "twitter": "Twitter"
+  },
+  "common": {
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "minutes": "min read",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "publishedAt": "Published",
+    "updatedAt": "Updated",
+    "author": "Author",
+    "backToTop": "Back to top"
+  },
+  "newsletter": {
+    "title": "Stay in the Loop",
+    "description": "Get the latest Hermes Agent tutorials and tips delivered to your inbox. No spam, unsubscribe anytime.",
+    "placeholder": "you@example.com",
+    "button": "Subscribe"
+  },
+  "socialProof": {
+    "stars": "GitHub Stars",
+    "forks": "Forks",
+    "models": "Supported Models",
+    "platforms": "Platforms"
+  },
+  "faqItems": {
+    "q1": "What is Hermes Agent?",
+    "a1": "Hermes Agent is an open-source, self-improving AI agent built by Nous Research. It can learn from experience, create skills autonomously, and interact through Telegram, Discord, and CLI.",
+    "q2": "What hardware do I need?",
+    "a2": "Hermes Agent itself is lightweight — it runs on any Linux server, macOS, WSL2, or even Android Termux. The AI model runs remotely via API (OpenRouter, OpenAI, etc.), so no GPU required.",
+    "q3": "Which AI models are supported?",
+    "a3": "Over 200 models including GPT-4, Claude, Llama, Mistral, and any OpenAI-compatible API. You can switch models on-the-fly.",
+    "q4": "How does multi-agent collaboration work?",
+    "a4": "Hermes can spawn isolated sub-agents for parallel tasks. Each sub-agent has its own context and can run independently while the host coordinates scheduling.",
+    "q5": "Is my data safe?",
+    "a5": "Yes. Hermes runs on your own infrastructure. Your conversations and data stay on your server. No data is sent to third parties except the AI model API you choose."
+  },
+  "latestTutorials": {
+    "title": "Latest Tutorials",
+    "viewAll": "View All →"
+  }
+}

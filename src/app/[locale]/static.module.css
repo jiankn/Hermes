@@ -1,0 +1,9 @@
+.page { max-width: 800px; margin: 0 auto; padding: var(--space-3xl) var(--space-lg); }
+.pageTitle { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: var(--space-xl); }
+.content { color: var(--text-main); line-height: 1.8; }
+.content h2 { font-size: 1.5rem; margin-top: var(--space-2xl); margin-bottom: var(--space-md); color: var(--text-primary); }
+.content p { margin-bottom: var(--space-md); }
+.content ul { padding-left: var(--space-xl); margin-bottom: var(--space-md); }
+.content li { margin-bottom: var(--space-sm); }
+.content a { color: var(--color-link); }
+.content a:hover { color: var(--accent); }

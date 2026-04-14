@@ -1,0 +1,16 @@
+.page { max-width: var(--max-width-content); margin: 0 auto; padding: var(--space-3xl) var(--space-lg); }
+.pageTitle { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: var(--space-sm); text-align: center; }
+.pageDesc { color: var(--text-muted); font-size: 1.1rem; margin-bottom: var(--space-3xl); text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+.timeline { position: relative; max-width: 700px; margin: 0 auto; }
+.timeline::before { content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+
+.day { position: relative; padding-left: 60px; margin-bottom: var(--space-2xl); }
+.dayDot { position: absolute; left: 16px; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg-primary); z-index: 1; }
+.dayLabel { font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: var(--space-xs); }
+.dayTitle { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-sm); }
+.dayDesc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: var(--space-md); line-height: 1.6; }
+.dayLink { color: var(--color-link); font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+.dayLink:hover { color: var(--accent); }
+
+@media (max-width: 768px) { .pageTitle { font-size: 2rem; } }
