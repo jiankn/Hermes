@@ -13,6 +13,8 @@ type Props = {
   params: Promise<{ locale: string; slug: string[] }>;
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   const params: { locale: string; slug: string[] }[] = [];
   for (const locale of routing.locales) {

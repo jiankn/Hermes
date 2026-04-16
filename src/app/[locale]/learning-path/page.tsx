@@ -1,4 +1,6 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -12,6 +14,20 @@ const days = [
   { day: 6, titleEn: 'Automation', titleZh: '自动化', descEn: 'Set up cron tasks, automated daily reports, and monitoring alerts.', descZh: '设置 Cron 任务、自动日报和监控告警。', link: '/tutorials/automation/cron-scheduling' },
   { day: 7, titleEn: 'Multi-Agent', titleZh: '多 Agent 协作', descEn: 'Multiple profiles, bot-to-bot orchestration, and host scheduling.', descZh: '多 Profile、Agent 间协作和 Host 调度。', link: '/tutorials/advanced/multi-agent-orchestration' },
 ];
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/learning-path',
+    title: isZh ? 'Hermes Agent 7 天学习路径' : 'Hermes Agent 7-Day Learning Path',
+    description: isZh
+      ? '按天拆解 Hermes Agent 学习路线，从入门到自动化实战。'
+      : 'A day-by-day learning plan to go from Hermes Agent basics to real automation workflows.',
+  });
+}
 
 export default async function LearningPathPage({ params }: Props) {
   const { locale } = await params;

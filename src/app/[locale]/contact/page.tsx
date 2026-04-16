@@ -1,6 +1,22 @@
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/contact',
+    title: isZh ? '联系 Hermes Agent 学习社区' : 'Contact Hermes Agent Community',
+    description: isZh
+      ? '获取反馈、合作与内容贡献联系方式。'
+      : 'Get in touch for feedback, partnerships, and content contributions.',
+  });
+}
 
 export default async function ContactPage({ params }: Props) {
   const { locale } = await params;

@@ -1,8 +1,24 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getArticles } from '@/lib/content';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../tutorials/page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/blog',
+    title: isZh ? 'Hermes Agent 博客' : 'Hermes Agent Blog',
+    description: isZh
+      ? '版本发布、架构解读与社区内容运营观察。'
+      : 'Release notes, architecture analysis, and editorial updates for Hermes Agent.',
+  });
+}
 
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params;

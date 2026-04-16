@@ -1,7 +1,23 @@
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import FAQAccordion from '@/components/ui/FAQAccordion/FAQAccordion';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/faq',
+    title: isZh ? 'Hermes Agent 常见问题' : 'Hermes Agent FAQ',
+    description: isZh
+      ? '查看 Hermes Agent 学习、安装与使用的常见问题解答。'
+      : 'Answers to common questions about learning, installing, and using Hermes Agent.',
+  });
+}
 
 export default async function FAQPage({ params }: Props) {
   const { locale } = await params;

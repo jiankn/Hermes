@@ -1,4 +1,22 @@
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
+
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/privacy',
+    title: isZh ? '隐私政策' : 'Privacy Policy',
+    description: isZh
+      ? '了解 Hermes Agent Community 如何处理网站使用数据与订阅信息。'
+      : 'Learn how Hermes Agent Community handles website analytics, newsletter subscriptions, and personal data.',
+  });
+}
 
 export default function PrivacyPage() {
   return (

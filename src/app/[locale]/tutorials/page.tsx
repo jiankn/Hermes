@@ -1,6 +1,8 @@
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
 import { getArticles, type ArticleMeta } from '@/lib/content';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from './page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -33,6 +35,20 @@ function sortTutorials(a: ArticleMeta, b: ArticleMeta) {
   }
 
   return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/tutorials',
+    title: isZh ? 'Hermes Agent 教程' : 'Hermes Agent Tutorials',
+    description: isZh
+      ? '从安装、对话到自动化与多 Agent 协作的系统教程。'
+      : 'Step-by-step Hermes Agent tutorials covering setup, workflows, automation, and multi-agent orchestration.',
+  });
 }
 
 export default async function TutorialsPage({ params }: Props) {

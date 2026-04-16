@@ -1,13 +1,28 @@
+import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import FAQAccordion from '@/components/ui/FAQAccordion/FAQAccordion';
 import NewsletterForm from '@/components/ui/NewsletterForm/NewsletterForm';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from './page.module.css';
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    title: isZh ? 'Hermes Agent 学习社区' : 'Hermes Agent Community',
+    description: isZh
+      ? 'Hermes Agent 一站式学习社区 — 从安装到多 Agent 协作的完整知识库。'
+      : 'The definitive learning hub for Hermes Agent — from first install to multi-agent orchestration.',
+  });
+}
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
@@ -63,7 +78,6 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
-      {/* Hero Section */}
       <section className={styles.hero}>
         <span className={styles.badge}>v0.8 Release is out</span>
         <h1 className={styles.title}>
@@ -82,7 +96,6 @@ export default async function HomePage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Terminal Mockup */}
         <div className={styles.terminal}>
           <div className={styles.terminalHeader}>
             <div className={`${styles.dot} ${styles.dotRed}`} />
@@ -102,7 +115,6 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Social Proof */}
       <section className={styles.socialProof}>
         <div className={styles.statItem}>
           <span className={styles.statNumber}>74.9k+</span>
@@ -122,7 +134,6 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className={styles.features}>
         <h2 className={styles.sectionTitle}>{t('features.title')}</h2>
         <div className={styles.grid}>
@@ -144,7 +155,6 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Latest Tutorials */}
       <section className={styles.tutorials}>
         <div className={styles.tutorialsHeader}>
           <h2 className={styles.sectionTitle}>{t('latestTutorials.title')}</h2>
@@ -170,10 +180,8 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* FAQ */}
       <FAQAccordion title={t('nav.faq')} items={faqItems} />
 
-      {/* Newsletter */}
       <NewsletterForm
         title={t('newsletter.title')}
         description={t('newsletter.description')}

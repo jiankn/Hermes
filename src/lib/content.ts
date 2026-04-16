@@ -1,8 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import contentManifest from '@/generated/content-manifest.json';
 
-const CONTENT_DIR = path.join(process.cwd(), 'content');
 export type ContentType = 'tutorials' | 'guides' | 'blog';
 
 export interface ArticleMeta {
@@ -32,72 +29,48 @@ export interface Article {
   content: string;
 }
 
-function getAllMdxFiles(dir: string): string[] {
-  if (!fs.existsSync(dir)) return [];
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const files: string[] = [];
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...getAllMdxFiles(fullPath));
-    } else if (entry.name.endsWith('.mdx')) {
-      files.push(fullPath);
-    }
-  }
-  return files;
+type GeneratedContentManifest = Record<ContentType, Record<string, Article[]>>;
+
+const manifest = contentManifest as GeneratedContentManifest;
+
+function getLocalizedArticles(type: ContentType, locale: string): Article[] {
+  return manifest[type]?.[locale] ?? [];
+}
+
+function sortArticlesByPublishedDate(a: ArticleMeta, b: ArticleMeta) {
+  return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
 }
 
 export function getArticles(
   type: ContentType,
   locale: string
 ): ArticleMeta[] {
-  const dir = path.join(CONTENT_DIR, type, locale);
-  const files = getAllMdxFiles(dir);
-
-  return files
-    .map((filePath) => {
-      const raw = fs.readFileSync(filePath, 'utf-8');
-      const { data } = matter(raw);
-      const urlPath = path.relative(dir, filePath).replace(/\.mdx$/, '').split(path.sep).join('/');
-      return {
-        ...(data as ArticleMeta),
-        urlPath,
-        slugSegments: urlPath.split('/'),
-        locale,
-        type,
-      };
-    })
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return getLocalizedArticles(type, locale)
+    .map((article) => article.meta)
+    .sort(sortArticlesByPublishedDate);
 }
 
 export function getArticleBySlug(
-  type: string,
+  type: ContentType,
   slugParts: string[],
   locale: string
 ): Article | null {
   const slugPath = slugParts.join('/');
-  const filePath = path.join(CONTENT_DIR, type, locale, `${slugPath}.mdx`);
 
-  if (!fs.existsSync(filePath)) return null;
-
-  const raw = fs.readFileSync(filePath, 'utf-8');
-  const { data, content } = matter(raw);
-
-  return {
-    meta: data as ArticleMeta,
-    content,
-  };
+  return getLocalizedArticles(type, locale).find((article) => article.meta.urlPath === slugPath) ?? null;
 }
 
 export function getAllSlugs(
   type: ContentType,
   locale: string
 ): string[][] {
-  const dir = path.join(CONTENT_DIR, type, locale);
-  const files = getAllMdxFiles(dir);
+  return getLocalizedArticles(type, locale).map((article) => {
+    const slugSegments = article.meta.slugSegments;
 
-  return files.map((filePath) => {
-    const relative = path.relative(dir, filePath).replace(/\.mdx$/, '');
-    return relative.split(path.sep);
+    if (slugSegments && slugSegments.length > 0) {
+      return slugSegments;
+    }
+
+    return (article.meta.urlPath ?? '').split('/').filter(Boolean);
   });
 }

@@ -1,4 +1,22 @@
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
+
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/terms',
+    title: isZh ? '服务条款' : 'Terms of Service',
+    description: isZh
+      ? '查看 Hermes Agent Community 的服务条款、免责声明与使用规范。'
+      : 'Review the terms, disclaimers, and acceptable use guidelines for Hermes Agent Community.',
+  });
+}
 
 export default function TermsPage() {
   return (

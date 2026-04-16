@@ -38,31 +38,49 @@ function walkMdxFiles(dir) {
   return files;
 }
 
-function getArticles(type, locale) {
+function sortByPublishedAt(a, b) {
+  return new Date(b.meta.publishedAt).getTime() - new Date(a.meta.publishedAt).getTime();
+}
+
+function getLocalizedArticles(type, locale) {
   const dir = path.join(root, 'content', type, locale);
 
   return walkMdxFiles(dir)
     .map((filePath) => {
       const raw = fs.readFileSync(filePath, 'utf8');
-      const { data } = matter(raw);
+      const { data, content } = matter(raw);
       const urlPath = path.relative(dir, filePath).replace(/\.mdx$/, '').split(path.sep).join('/');
 
       return {
-        urlPath,
-        publishedAt: data.publishedAt,
-        updatedAt: data.updatedAt,
+        meta: {
+          ...data,
+          urlPath,
+          slugSegments: urlPath.split('/'),
+          locale,
+          type,
+        },
+        content,
       };
     })
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    .sort(sortByPublishedAt);
 }
 
-function buildEntries() {
+function buildContentManifest() {
+  return Object.fromEntries(
+    contentTypes.map((type) => [
+      type,
+      Object.fromEntries(locales.map((locale) => [locale, getLocalizedArticles(type, locale)])),
+    ])
+  );
+}
+
+function buildEntries(manifest) {
   const now = new Date().toISOString();
   const entries = [];
 
-  for (const locale of locales) {
-    for (const page of staticPages) {
-      entries.push({
+  for (const page of staticPages) {
+    entries.push(
+      ...locales.map((locale) => ({
         url: `${baseUrl}/${locale}${page}`,
         lastModified: now,
         changeFrequency: page === '' ? 'daily' : 'weekly',
@@ -70,14 +88,15 @@ function buildEntries() {
         alternates: {
           en: `${baseUrl}/en${page}`,
           zh: `${baseUrl}/zh${page}`,
+          'x-default': `${baseUrl}/en${page}`,
         },
-      });
-    }
+      }))
+    );
   }
 
   for (const type of contentTypes) {
     const localizedArticles = Object.fromEntries(
-      locales.map((locale) => [locale, getArticles(type, locale)])
+      locales.map((locale) => [locale, manifest[type]?.[locale] ?? []])
     );
 
     for (const locale of locales) {
@@ -85,17 +104,20 @@ function buildEntries() {
         const languages = Object.fromEntries(
           locales
             .filter((candidate) =>
-              localizedArticles[candidate].some((entry) => entry.urlPath === article.urlPath)
+              localizedArticles[candidate].some((entry) => entry.meta.urlPath === article.meta.urlPath)
             )
-            .map((candidate) => [candidate, `${baseUrl}/${candidate}/${type}/${article.urlPath}`])
+            .map((candidate) => [candidate, `${baseUrl}/${candidate}/${type}/${article.meta.urlPath}`])
         );
 
         entries.push({
-          url: `${baseUrl}/${locale}/${type}/${article.urlPath}`,
-          lastModified: article.updatedAt || article.publishedAt || now,
+          url: `${baseUrl}/${locale}/${type}/${article.meta.urlPath}`,
+          lastModified: article.meta.updatedAt || article.meta.publishedAt || now,
           changeFrequency: type === 'blog' ? 'monthly' : 'weekly',
           priority: type === 'tutorials' ? 0.7 : 0.6,
-          alternates: languages,
+          alternates: {
+            ...languages,
+            'x-default': languages.en ?? `${baseUrl}/${locale}/${type}/${article.meta.urlPath}`,
+          },
         });
       }
     }
@@ -139,10 +161,16 @@ function renderSitemap(entries) {
   return lines.join('\n');
 }
 
-const outputPath = path.join(root, 'public', 'sitemap.xml');
-const sitemapXml = renderSitemap(buildEntries());
+const manifest = buildContentManifest();
+const manifestPath = path.join(root, 'src', 'generated', 'content-manifest.json');
+const sitemapPath = path.join(root, 'public', 'sitemap.xml');
 
-fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-fs.writeFileSync(outputPath, sitemapXml, 'utf8');
+fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
+fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
-console.log(`Generated ${outputPath}`);
+const sitemapXml = renderSitemap(buildEntries(manifest));
+fs.mkdirSync(path.dirname(sitemapPath), { recursive: true });
+fs.writeFileSync(sitemapPath, sitemapXml, 'utf8');
+
+console.log(`Generated ${manifestPath}`);
+console.log(`Generated ${sitemapPath}`);

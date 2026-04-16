@@ -1,5 +1,7 @@
+import type { Metadata } from 'next';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
 import { getArticles, type ArticleMeta } from '@/lib/content';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../tutorials/page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -18,6 +20,20 @@ function sortGuides(a: ArticleMeta, b: ArticleMeta) {
   }
 
   return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/guides',
+    title: isZh ? 'Hermes Agent 指南' : 'Hermes Agent Guides',
+    description: isZh
+      ? '聚焦部署、安全与架构决策的深度指南。'
+      : 'In-depth Hermes Agent guides on deployment, security, and architecture decisions.',
+  });
 }
 
 export default async function GuidesPage({ params }: Props) {

@@ -1,6 +1,22 @@
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isZh = locale === 'zh';
+
+  return buildPageMetadata({
+    locale,
+    pathname: '/about',
+    title: isZh ? '关于 Hermes Agent 学习社区' : 'About Hermes Agent Community',
+    description: isZh
+      ? '了解 Hermes Agent Community 的定位、使命与内容原则。'
+      : 'Learn about the mission, editorial standards, and role of Hermes Agent Community.',
+  });
+}
 
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
