@@ -5,4 +5,3 @@ Sitemap: https://hermesagent.sbs/sitemap.xml
 
 # Block search results and API routes
 Disallow: /api/
-Disallow: /_next/
