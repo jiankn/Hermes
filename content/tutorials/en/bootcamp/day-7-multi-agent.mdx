@@ -17,7 +17,7 @@ featured: false
 ---
 ## Do not use multi-agent because it sounds cool
 
-Multi-agent orchestration is the easiest topic to turn into science fiction: a researcher, writer, reviewer, and operator all working at once. It sounds powerful. From a product perspective, the first-principles question is simpler: does it reduce the total cost of finishing the task?
+Multi-agent orchestration is the easiest topic to turn into science fiction: a researcher, writer, reviewer, and operator all working at once. It sounds powerful. The first-principles question is simpler: does it reduce the total cost of finishing the task?
 
 If not, it only splits one confusing problem into several confusing problems.
 
@@ -117,34 +117,6 @@ The seven-day path now has a product loop: run Hermes, give it durable context, 
 
 - **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - extend Hermes with low-risk Skills first.
 - **[Hermes vs OpenClaw](/en/guides/comparisons/hermes-vs-openclaw)** - understand the positioning difference.
-
-## Run It Again From The User Side
-
-Day 7 is easy to distort because “multi-agent” sounds exciting. The user does not need a room full of assistants talking at once. They need complex work split across responsibilities, then merged by one owner who can make tradeoffs.
-
-Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The failure signals are familiar: everyone analyzes and nobody owns the conclusion, every agent can modify things and no one resolves conflicts, or the system produces many messages but no deliverable.
-
-### Field Checks
-
-- Can a user repeat this step without rereading the chat transcript?
-- Is there a file, log, screenshot, config fragment, or artifact to inspect?
-- When the step fails, does the user know where to stop instead of adding more configuration?
-- Are sensitive data, write permissions, and external delivery handled separately?
-- Could another person continue tomorrow from the artifact you leave today?
-
-### Product Manager Lens
-
-Split by responsibility before splitting by model count. One agent gathers, one executes, one reviews, and one lead chooses what to ship.
-
-From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The core test is handoff quality. Every delegated task needs inputs, boundaries, artifacts, and an exit condition. Otherwise parallelism only creates more context to manage.
-
-Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
-
-### What Carries Into Tomorrow
-
-Leave with an orchestration blueprint: roles, inputs, blocked actions, deliverables, merge order, and human decision points.
-
-Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
 
 <!-- BEGIN beginner-walkthrough -->
 ## Beginner Walkthrough: Your First Multi-Agent Split

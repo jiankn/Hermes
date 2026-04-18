@@ -5,192 +5,6 @@ const root = process.cwd();
 const today = '2026-04-18';
 const author = 'HermesAgent Community';
 
-const lensData = {
-  'day-1-setup': {
-    zh: {
-      user: '第 1 天的真实用户，不是想证明自己会装工具，而是想知道这个 Agent 是否值得继续投入一周。最好的起点是一次可复现的小胜利：能启动、能回答、能解释边界，出了问题也知道从哪里回退。',
-      failure: '如果用户一边装依赖、一边换模型、一边开消息通道，任何一步失败都会混在一起，最后只剩一句“这个东西不稳定”。',
-      move: '把安装拆成四个可验证节点：环境、模型、启动、边界。每个节点都要有一条证据，比如版本输出、模型名称、启动命令、权限说明。',
-      review: '这一天的评审重点不是结果多酷，而是另一个人能不能复现同样的启动路径。',
-      artifact: '带走一份启动卡片：运行环境、模型端点、启动命令、允许读取的目录、绝不自动执行的动作。'
-    },
-    en: {
-      user: 'The real Day 1 user is not trying to prove that they can install another tool. They are deciding whether this agent deserves a week of attention. The best start is one repeatable small win: Hermes launches, answers from the right environment, and explains what it is allowed to touch.',
-      failure: 'If the user installs dependencies, switches models, enables messaging, and edits permissions in the same sitting, every failure looks like one blurry failure called “Hermes is unstable.”',
-      move: 'Split setup into four checkpoints: environment, model, startup, and boundary. Each checkpoint needs evidence, such as a version output, model name, launch command, or permission note.',
-      review: 'The review question is not whether the demo was exciting. It is whether another person can repeat the same start path tomorrow.',
-      artifact: 'Leave with a startup card: runtime environment, model endpoint, launch command, readable folders, and actions Hermes must never perform without approval.'
-    }
-  },
-  'day-2-memory': {
-    zh: {
-      user: '第 2 天的用户开始期待 Hermes 像同事一样理解自己，但这里最容易翻车。记忆不是越多越好，而是越可用越好。一个助理如果记住了所有情绪和碎片，却忘了审批边界，体验会从贴心变成危险。',
-      failure: '糟糕的记忆通常有三个信号：无法解释来源、无法删除、无法区分临时任务和长期偏好。',
-      move: '把记忆写成产品规则：什么可以记，谁确认后才记，多久复查一次，哪些内容永远不进长期记忆。',
-      review: '这一天要测试的是恢复能力。重开会话后，Hermes 应该能记住工作方式，而不是背诵一堆旧聊天。',
-      artifact: '带走一份记忆契约：稳定偏好、项目事实、隐私禁区、过期规则和删除方式。'
-    },
-    en: {
-      user: 'On Day 2, users start wanting Hermes to understand them like a coworker. This is also where memory can go wrong. More memory is not automatically better. Useful memory is reviewed, durable, and connected to future decisions.',
-      failure: 'Bad memory has three early signals: Hermes cannot explain where a fact came from, the user cannot remove it, and temporary task context gets treated like a permanent preference.',
-      move: 'Turn memory into product rules: what may be saved, what requires confirmation, how often it is reviewed, and what never belongs in long-term memory.',
-      review: 'The test is recovery. After a restart, Hermes should remember how to work with the user, not recite a pile of stale chat fragments.',
-      artifact: 'Leave with a memory contract: stable preferences, project facts, privacy exclusions, expiry rules, and the deletion path.'
-    }
-  },
-  'day-3-integration': {
-    zh: {
-      user: '第 3 天开始，用户会问一个很实际的问题：我能不能在手机上喊它？这不是懒，而是工作场景变了。很多任务不是坐在电脑前发生的，而是在路上、群聊里、会议结束后的两分钟里发生的。',
-      failure: '消息入口最常见的失败，不是连不上，而是连上后谁都能喊、什么都能做、结果还不知道发给了谁。',
-      move: '先把通道当成入口产品，而不是技术炫技。入口要有白名单、会话归属、默认目录、危险动作审批和清晰的失败反馈。',
-      review: '这一天要验证的是从真实消息到可复查产物的闭环，而不是扫码成功。',
-      artifact: '带走一份通道运行单：平台、授权用户、默认目录、允许附件、禁止动作、日志位置和人工接管方式。'
-    },
-    en: {
-      user: 'On Day 3, the practical question appears: can I reach Hermes from my phone? That is not laziness. Work often happens away from the terminal: on the road, inside a team chat, or two minutes after a meeting ends.',
-      failure: 'The most common messaging failure is not connection failure. It is connecting too broadly: anyone can trigger it, every action is available, and nobody knows where the result was sent.',
-      move: 'Treat the channel as an entry product, not as a technical badge. It needs an allowlist, session ownership, a default workspace, approval for risky actions, and failure messages a normal user can understand.',
-      review: 'The test is the full loop from real message to reviewable artifact, not whether a QR code or token handshake succeeded once.',
-      artifact: 'Leave with a channel run sheet: platform, allowed users, default directory, attachment rules, blocked actions, log location, and manual takeover path.'
-    }
-  },
-  'day-4-data': {
-    zh: {
-      user: '第 4 天的用户通常已经不满足于聊天了。他们会丢给 Hermes 文件、网页、表格和半成品笔记，希望它产出能用的东西。这里的关键不是让答案好看，而是让输入、判断和输出都能被复查。',
-      failure: '最危险的信号是 Hermes 给出一段顺滑总结，但你找不到它依据哪一行、忽略了哪些异常、哪些判断其实没有把握。',
-      move: '把数据任务设计成流水线：原始材料只读，处理中间产物可丢弃，最终输出必须带字段、来源和置信度。',
-      review: '这一天要训练的是可审计性。一个慢一点但能追溯的输出，比一个漂亮但不可验证的总结更接近产品。',
-      artifact: '带走一份数据工作台规范：文件夹结构、命名规则、输出 schema、低置信度标记和人工复核清单。'
-    },
-    en: {
-      user: 'By Day 4, users usually want more than conversation. They hand Hermes files, web pages, tables, and rough notes, then expect something usable in return. The key is not a prettier answer. The key is whether the input, judgment, and output can be reviewed.',
-      failure: 'The dangerous signal is a smooth summary with no trail: no line reference, no anomaly list, and no marker showing which conclusions are uncertain.',
-      move: 'Design the data task as a pipeline: raw material stays read-only, intermediate files may be discarded, and final output must carry fields, sources, and confidence.',
-      review: 'The skill being trained is auditability. A slower output with traceable evidence is more product-ready than a polished summary nobody can verify.',
-      artifact: 'Leave with a data bench spec: folder structure, naming rules, output schema, low-confidence markers, and a human review checklist.'
-    }
-  },
-  'day-5-skills': {
-    zh: {
-      user: '第 5 天会出现一个转折：用户不想再每次从头解释同一件事。真正的进阶不是写更长 prompt，而是把重复流程变成可调用、可改进、可下线的技能。',
-      failure: '糟糕的 Skill 通常像一篇励志文章：听起来有道理，但没有输入要求、没有失败处理、没有输出样例，也不知道什么时候不该用。',
-      move: '把 Skill 当成小型操作手册。它应该写清楚触发条件、需要的材料、不能碰的边界、输出格式和验收标准。',
-      review: '这一天要检查的不是 Skill 数量，而是一个新会话能否根据 Skill 复现同样质量。',
-      artifact: '带走一份 Skill 候选卡：触发场景、输入清单、步骤、输出样例、权限等级和退役条件。'
-    },
-    en: {
-      user: 'Day 5 is the turning point where users stop wanting to explain the same process from scratch. The upgrade is not a longer prompt. The upgrade is turning repeat work into a callable, improvable, and removable skill.',
-      failure: 'A weak skill reads like motivational prose: it sounds right, but it has no input requirements, no failure handling, no output example, and no rule for when it should not run.',
-      move: 'Treat a skill as a small operating manual. It should define trigger conditions, required materials, boundaries, output format, and acceptance criteria.',
-      review: 'The review is not how many skills exist. It is whether a fresh session can use the skill and reproduce the same quality of work.',
-      artifact: 'Leave with a skill candidate card: trigger scenario, input checklist, steps, output sample, permission level, and retirement condition.'
-    }
-  },
-  'day-6-automation': {
-    zh: {
-      user: '第 6 天的用户会想让 Hermes 自己跑起来。这个愿望很正常，但自动化的本质不是省掉点击，而是把一个已经稳定的流程交给时间。没有稳定流程，定时只会把错误准时放大。',
-      failure: '失败信号很清楚：输入每天都不一样、输出没人看、失败不报警、重复执行会造成副作用、对外发送没有审批。',
-      move: '先设计人工可运行版本，再设计定时版本。触发器只负责启动，不能替你定义输入质量、权限边界和失败处理。',
-      review: '这一天要验证的是三次连续运行的稳定性：同样输入得到可解释输出，失败能停住，重复运行不会污染数据。',
-      artifact: '带走一份自动化运行卡：触发时间、输入来源、保存快照、输出位置、通知对象、失败策略和暂停开关。'
-    },
-    en: {
-      user: 'On Day 6, users want Hermes to run by itself. That desire is reasonable, but automation is not mainly about saving clicks. It is about handing a proven workflow to time. Without a stable manual workflow, scheduling only makes mistakes arrive on time.',
-      failure: 'The warning signs are clear: inputs change shape every day, nobody reads the output, failures are silent, repeated runs create side effects, or external delivery happens without approval.',
-      move: 'Design the manual version first, then the scheduled version. A trigger starts the job, but it does not define input quality, permission boundaries, or failure handling for you.',
-      review: 'The test is three consecutive runs: the same input produces explainable output, failures stop cleanly, and retries do not pollute data.',
-      artifact: 'Leave with an automation run card: trigger time, input source, saved snapshot, output location, notification target, failure policy, and pause switch.'
-    }
-  },
-  'day-7-multi-agent': {
-    zh: {
-      user: '第 7 天很容易被“多 Agent”这个词带偏。用户真正需要的不是一群助手同时说话，而是把复杂工作拆给不同职责的人，再由一个负责人合并判断。',
-      failure: '失败信号是大家都在做分析、没人拥有结论；每个 Agent 都能改东西、没人知道冲突怎么解决；输出看起来很多，但没有一个可交付结果。',
-      move: '先按职责拆分，而不是按模型数量拆分。一个 Agent 负责搜集，一个负责执行，一个负责质检，一个负责人做取舍和最终表达。',
-      review: '这一天的核心是交接质量。每个子任务都要有输入、边界、产物和退出条件，否则并行只会制造更多上下文。',
-      artifact: '带走一份编排蓝图：角色、输入、禁止动作、交付物、汇总顺序和人工决策点。'
-    },
-    en: {
-      user: 'Day 7 is easy to distort because “multi-agent” sounds exciting. The user does not need a room full of assistants talking at once. They need complex work split across responsibilities, then merged by one owner who can make tradeoffs.',
-      failure: 'The failure signals are familiar: everyone analyzes and nobody owns the conclusion, every agent can modify things and no one resolves conflicts, or the system produces many messages but no deliverable.',
-      move: 'Split by responsibility before splitting by model count. One agent gathers, one executes, one reviews, and one lead chooses what to ship.',
-      review: 'The core test is handoff quality. Every delegated task needs inputs, boundaries, artifacts, and an exit condition. Otherwise parallelism only creates more context to manage.',
-      artifact: 'Leave with an orchestration blueprint: roles, inputs, blocked actions, deliverables, merge order, and human decision points.'
-    }
-  }
-};
-
-function productLens(locale, slug) {
-  const lens = lensData[slug]?.[locale];
-  if (!lens) {
-    return '';
-  }
-
-  if (locale === 'zh') {
-    return `
-## 站在用户那边再做一遍
-
-${lens.user}
-
-很多教程会把这一步写成“照着命令跑完”。但用户真正需要的不是命令清单，而是一个能复用的判断过程。你要能说清楚为什么现在做这一步，失败时看哪个信号，成功后留下什么证据。${lens.failure}
-
-### 现场判断
-
-- 用户是否能不看聊天记录独立复现这一步？
-- 输出是否有文件、日志、截图或配置片段可检查？
-- 失败时是否知道先停在哪里，而不是继续叠更多配置？
-- 是否把敏感信息、写权限和对外发送分开处理？
-- 明天换一个人接手时，是否能沿着同一份产物继续做？
-
-### 产品经理视角
-
-${lens.move}
-
-从产品角度看，Bootcamp 每一天都不应该只是“学一个功能”。它应该让用户把一个真实摩擦点降级：从不知道怎么开始，变成知道下一步怎么判断；从依赖灵感，变成依赖流程；从一次性成功，变成可以让别人复查。${lens.review}
-
-真正有价值的训练营内容，应该能让用户在失败时也赚到东西。即使当天没有跑通，用户也应该更清楚自己卡在环境、权限、输入、模型、工具还是协作边界上。这样第二次尝试就不是重复碰运气，而是在缩小问题范围。
-
-### 明天带走什么
-
-${lens.artifact}
-
-不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
-
-再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
-`;
-  }
-
-  return `
-## Run It Again From The User Side
-
-${lens.user}
-
-Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. ${lens.failure}
-
-### Field Checks
-
-- Can a user repeat this step without rereading the chat transcript?
-- Is there a file, log, screenshot, config fragment, or artifact to inspect?
-- When the step fails, does the user know where to stop instead of adding more configuration?
-- Are sensitive data, write permissions, and external delivery handled separately?
-- Could another person continue tomorrow from the artifact you leave today?
-
-### Product Manager Lens
-
-${lens.move}
-
-From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. ${lens.review}
-
-Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
-
-### What Carries Into Tomorrow
-
-${lens.artifact}
-
-Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
-`;
-}
-
 function frontmatter(meta) {
   return [
     '---',
@@ -218,9 +32,7 @@ function writeArticle(article) {
   for (const locale of ['en', 'zh']) {
     const filePath = path.join(root, 'content', 'tutorials', locale, 'bootcamp', `${article.meta.slug}.mdx`);
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    const body = [article[locale].trim(), productLens(locale, article.meta.slug).trim()]
-      .filter(Boolean)
-      .join('\n\n');
+    const body = article[locale].trim();
     fs.writeFileSync(filePath, `${frontmatter(article.meta)}${body}\n`, 'utf8');
   }
 }
@@ -233,7 +45,7 @@ const articles = [
       title: 'Day 1: Make Hermes Run Before You Make It Clever',
       titleZh: 'Day 1：先跑起来，再谈聪明',
       description: 'A practical first-day setup guide: choose local or cloud, configure a model, run doctor, and keep secrets out of the chat.',
-      descriptionZh: '从用户真实启动成本出发，完成本地或云端安装、模型配置、doctor 检查和第一条安全对话。',
+      descriptionZh: '从真实启动成本出发，完成本地或云端安装、模型配置、doctor 检查和第一条安全对话。',
       tags: ['setup', 'privacy', 'model', 'doctor', 'beginner'],
       difficulty: 'beginner',
       readingTime: 13,
@@ -241,7 +53,7 @@ const articles = [
     zh: `
 ## 今天先别追求“全功能”
 
-很多教程一上来就讲云服务器、微信通道、飞书机器人、Skills、自动化任务。看起来热闹，用户却很容易卡在第一个小时：命令敲完了没有反应、模型 Key 不知道填哪里、Windows 终端和 WSL2 混着用、配置文件在哪也找不到。
+很多教程一上来就讲云服务器、微信通道、飞书机器人、Skills、自动化任务。看起来热闹，但你很容易卡在第一个小时：命令敲完了没有反应、模型 Key 不知道填哪里、Windows 终端和 WSL2 混着用、配置文件在哪也找不到。
 
 所以 Day 1 只做一件事：让 Hermes Agent 在你能理解的环境里稳定跑起来。不是“安装成功”四个字，而是你能回答三个问题：它跑在哪里？它调用哪个模型？它现在能碰哪些文件和密钥？
 
@@ -249,11 +61,11 @@ const articles = [
 
 ## 先做产品判断：本地还是云端
 
-从产品经理角度看，安装方式不是技术偏好，而是使用场景选择。
+安装方式先按使用场景选，不要按教程截图选。
 
-如果你只是想试试看，或者担心隐私，先本地跑。Mac 和 Linux 直接用终端，Windows 用户优先走 WSL2。Windows 原生环境很容易被路径、权限、Python 版本这些细节拖住，不值得在第一天硬刚。
+如果你只是想试试看，或者担心隐私，先本地跑。Mac 和 Linux 直接用终端，Windows 环境优先走 WSL2。Windows 原生环境很容易被路径、权限、Python 版本这些细节拖住，不值得在第一天硬刚。
 
-如果你希望它 24 小时在线，能从手机消息里随时喊它，那就考虑云端。“10 分钟云端部署”之所以容易吸引新用户，原因很现实：云端的长期在线价值比本地炫技更容易被感知。但云端也意味着你要认真处理密钥、端口、用户权限和日志。
+如果你希望它 24 小时在线，能从手机消息里随时喊它，那就考虑云端。“10 分钟云端部署”之所以容易吸引人，原因很现实：云端的长期在线价值比本地炫技更容易被感知。但云端也意味着你要认真处理密钥、端口、访问权限和日志。
 
 今天的建议很克制：能本地跑通就先本地；有明确移动端需求，再上云。
 
@@ -291,7 +103,7 @@ const articles = [
 
 ## 常见卡点
 
-- Windows 用户直接在 PowerShell 里折腾，最后卡在 Linux 依赖。解决：先装 WSL2。
+- Windows 环境直接在 PowerShell 里折腾，最后卡在 Linux 依赖。解决：先装 WSL2。
 - 安装完成后找不到 \`hermes\`。解决：重新加载 shell，或打开新终端。
 - 看到模型列表就乱选。解决：先用你已经有 Key 的模型，别在第一天比较模型智商。
 - 把微信、飞书、自动化一起配置。解决：第一天只验证 CLI 可用。
@@ -322,7 +134,7 @@ first_boundary:
     en: `
 ## Do not start with every feature
 
-Most Hermes tutorials rush toward the exciting parts: cloud deployment, WeChat or Feishu, Skills, automation, and multi-agent workflows. That is exactly how beginners lose the first hour. The shell says command not found. The model key goes into the wrong file. Windows users mix PowerShell and WSL2. The bot starts once but nobody knows how to start it again tomorrow.
+Most Hermes tutorials rush toward the exciting parts: cloud deployment, WeChat or Feishu, Skills, automation, and multi-agent workflows. That is exactly how beginners lose the first hour. The shell says command not found. The model key goes into the wrong file. On Windows, PowerShell and WSL2 get mixed together. The bot starts once but nobody knows how to start it again tomorrow.
 
 Day 1 has one job: make Hermes run in an environment you understand. Not “installed successfully” in a vague way, but three concrete answers: where is it running, which model endpoint is it using, and what is it allowed to touch?
 
@@ -330,9 +142,9 @@ Day 1 has one job: make Hermes run in an environment you understand. Not “inst
 
 ## Local or cloud is a product decision
 
-From a product manager’s point of view, installation is not a technical preference. It is a usage decision.
+Choose the installation path by usage, not by whatever screenshot a tutorial happens to show.
 
-If you are evaluating Hermes or you care most about privacy, start locally. macOS and Linux can use the terminal directly. Windows users should use WSL2 instead of fighting native path and dependency issues. The goal is to reduce startup friction, not prove that every environment can be forced to work.
+If you are evaluating Hermes or you care most about privacy, start locally. macOS and Linux can use the terminal directly. On Windows, use WSL2 instead of fighting native path and dependency issues. The goal is to reduce startup friction, not prove that every environment can be forced to work.
 
 If you want a 24-hour assistant reachable from your phone, cloud deployment makes sense. That is why so many Chinese walkthroughs lead with “ten-minute cloud setup”: always-on access is the first value ordinary users can feel. But cloud also means you must care about secrets, ports, user permissions, and logs.
 
@@ -372,7 +184,7 @@ Write these rules into your setup note:
 
 ## Where people usually get stuck
 
-- Windows users stay in PowerShell and hit Linux dependency problems. Use WSL2.
+- Staying in PowerShell on Windows and hitting Linux dependency problems. Use WSL2.
 - \`hermes\` is not found after install. Reload the shell or open a fresh terminal.
 - Users compare model intelligence before confirming the shell works. Pick one model you already have access to.
 - Messaging, cloud, and automation are configured together. Resist that. First prove the CLI.
@@ -416,7 +228,7 @@ Tomorrow is memory. The goal is not to make Hermes remember everything; it is to
     zh: `
 ## 记忆不是越多越好
 
-很多人第一次听到 Hermes，会被“越用越懂你”打动。这个卖点是真的有吸引力，但也最容易被误解。用户听到“记忆”，第一反应是让它把所有聊天都存下来；产品经理看到这里应该立刻紧张，因为无边界的记忆会变成噪音、隐私风险和错误决策来源。
+很多人第一次听到 Hermes，会被“越用越懂你”打动。这个卖点是真的有吸引力，但也最容易被误解。第一次配置记忆时，不要急着让它保存所有聊天；无边界的记忆会变成噪音、隐私风险和错误决策来源。
 
 今天的目标不是让 Hermes 记住一切，而是让它记住那些“下次能少问你一次”的东西。
 
@@ -448,7 +260,7 @@ Tomorrow is memory. The goal is not to make Hermes remember everything; it is to
 
 ## 记忆和 Session Search 分工
 
-很多入门用户会把“记忆”和“历史搜索”混在一起。一个好理解的分法是：
+刚开始很容易把“记忆”和“历史搜索”混在一起。一个好理解的分法是：
 
 长期记忆是员工手册。它告诉 Hermes 你是谁、偏好是什么、哪些事不能做。
 
@@ -477,7 +289,7 @@ Session Search 是档案室。它帮 Hermes 回忆过去聊过什么，但不应
 Memory policy:
 - 只保存稳定偏好、长期项目规则和明确审批边界。
 - 临时任务、一次性链接、未验证猜测，不进入长期记忆。
-- 删除文件、对外发送、花钱、部署服务，必须先问用户。
+- 删除文件、对外发送、花钱、部署服务，必须先问你。
 - 每两周复查一次记忆，合并重复项，删除过期项。
 \`\`\`
 
@@ -489,10 +301,10 @@ Memory policy:
 
 - 每周减少了多少重复背景说明。
 - Hermes 是否更少误用旧项目规则。
-- 记忆内容能不能被用户看懂并手动修改。
+- 记忆内容能不能被你看懂并手动修改。
 - 删除一条记忆后，系统行为是否可预测。
 
-如果用户不敢改记忆，说明产品还不透明。如果 Hermes 总拿旧信息说事，说明记忆没有生命周期。
+如果你不敢改记忆，说明这套记忆还不透明。如果 Hermes 总拿旧信息说事，说明记忆没有生命周期。
 
 ## 今天交付什么
 
@@ -637,7 +449,7 @@ Tomorrow you move Hermes into a messaging channel. The point is not scanning a Q
     zh: `
 ## 为什么一定要接消息渠道
 
-只在终端里用 Hermes，很像把一个员工锁在机房里。能干活，但每次找它都要开电脑、进目录、敲命令。消息入口之所以重要，不是因为扫码本身高级，而是因为用户真正的需求发生在聊天里：路上想到一个任务、群里有人丢来一段上下文、手机上突然需要查一份资料。
+只在终端里用 Hermes，很像把一个员工锁在机房里。能干活，但每次找它都要开电脑、进目录、敲命令。消息入口之所以重要，不是因为扫码本身高级，而是因为很多任务本来就发生在聊天里：路上想到一个任务、群里有人丢来一段上下文、手机上突然需要查一份资料。
 
 今天的目标不是把所有平台都接上，而是让 Hermes 多一个可靠入口。
 
@@ -657,7 +469,7 @@ hermes gateway status
 
 看当前版本实际列出的平台，再选择你最常用、最容易验证、最不容易误触发高风险操作的渠道。
 
-如果你在国内，飞书/企业微信/微信类入口的体感更好；如果你面向海外团队，Telegram、Discord、Slack 更自然。产品原则只有一个：入口要贴近用户，不要贴近教程截图。
+如果你在国内，飞书/企业微信/微信类入口的体感更好；如果你面向海外团队，Telegram、Discord、Slack 更自然。判断原则只有一个：入口要贴近日常工作流，不要贴近教程截图。
 
 ## 消息渠道的风险会变大
 
@@ -684,7 +496,7 @@ hermes gateway status
 1. 运行 \`hermes gateway setup\`。
 2. 选择一个渠道，不要多选一堆。
 3. 如果需要扫码或授权，只在你确认来源的页面完成。
-4. 设置允许用户或配对方式。陌生人发消息不应该直接获得控制权。
+4. 设置允许账号或配对方式。陌生人发消息不应该直接获得控制权。
 5. 启动 gateway：\`hermes gateway start\`。
 6. 用手机发一条只读消息，例如“总结这段文字”。
 7. 查看 gateway 状态和日志。
@@ -780,7 +592,7 @@ Do not allow yet:
 1. Run \`hermes gateway setup\`.
 2. Choose one channel, not five.
 3. If QR login or authorization is required, confirm the source before scanning.
-4. Configure allowed users or pairing. Unknown users should not gain control.
+4. Configure allowlisted accounts or pairing. Unknown accounts should not gain control.
 5. Start the gateway with \`hermes gateway start\`.
 6. Send a read-only message from your phone.
 7. Check gateway status and logs.
@@ -844,7 +656,7 @@ Tomorrow you move from chat to real work: files, data, and reviewable artifacts.
     zh: `
 ## 聊天只是入口，文件才是工作
 
-用户真正感受到 Agent 价值，往往不是它会聊天，而是它能接住一堆乱材料：一份会议纪要、几个 CSV、一个网页、一个需求文档，然后产出可以检查的东西。日报、网站监控、数据提取、内容改写，本质都是同一个动作：把杂乱输入变成结构化产物。
+真正能感受到 Agent 价值的时候，往往不是它会聊天，而是它能接住一堆乱材料：一份会议纪要、几个 CSV、一个网页、一个需求文档，然后产出可以检查的东西。日报、网站监控、数据提取、内容改写，本质都是同一个动作：把杂乱输入变成结构化产物。
 
 今天让 Hermes 做第一份“可复查的数据工作”。
 
@@ -1095,7 +907,7 @@ Tomorrow is Skills and MCP. Today you created a repeatable workflow; tomorrow yo
     zh: `
 ## Skill 不是“高级 Prompt”
 
-很多中文文章会把 Skill 写得很玄：会自我进化、会从经验里长出能力。这个方向没错，但用户真正需要先理解的是：Skill 是把一个重复流程产品化。
+很多中文文章会把 Skill 写得很玄：会自我进化、会从经验里长出能力。先别被这些词带走，先把 Skill 理解成一件很具体的事：把一个重复流程产品化。
 
 如果你每周都让 Hermes 做同一类事，比如整理周报、审查 PR、处理用户反馈、生成内容草稿，那就不该每次重新写 prompt。你应该把流程、输入、输出、注意事项和验收标准沉淀下来。
 
@@ -1116,7 +928,7 @@ Tomorrow is Skills and MCP. Today you created a repeatable workflow; tomorrow yo
 不适合写成 Skill 的情况：
 
 - 一次性探索任务。
-- 连用户自己都没想清楚的目标。
+- 连你自己都没想清楚的目标。
 - 高风险、强依赖人工判断的动作。
 - 只是为了看起来厉害。
 
@@ -1353,7 +1165,7 @@ Tomorrow is automation. Only a workflow that has produced stable results manuall
 - 还没手动跑通过。
 - 失败后无法知道发生了什么。
 
-产品原则是：先人工跑三次，再交给时间。
+判断原则是：先人工跑三次，再交给时间。
 
 ## 把流程拆成四段
 
@@ -1388,7 +1200,7 @@ retry:
 
 ## 失败日志要像产品功能
 
-日志不是开发者自嗨，是自动化产品的一部分。用户早上没收到日报时，第一反应不应该是“AI 又抽风了”，而应该能看到：
+日志不是开发者自嗨，是自动化体验的一部分。早上没收到日报时，第一反应不应该是“AI 又抽风了”，而应该能看到：
 
 - 任务有没有启动。
 - 读了哪些输入。
@@ -1482,7 +1294,7 @@ The key is \`summarize_from\`. Hermes should summarize from a saved artifact, no
 
 ## Logs are a product feature
 
-Logs are not developer decoration. They are part of the automation experience. If the morning brief does not arrive, the user should be able to see:
+Logs are not developer decoration. They are part of the automation experience. If the morning brief does not arrive, you should be able to see:
 
 - whether the job started;
 - which inputs were read;
@@ -1531,7 +1343,7 @@ Tomorrow is multi-agent orchestration. Scheduling solves repetition; multi-agent
     zh: `
 ## 不要为了酷而多 Agent
 
-多 Agent 是最容易写得像科幻的部分：研究员、写手、审稿人、执行者，一群智能体同时开工。听起来很强，但从产品角度看，第一性原理只有一个：多 Agent 是否降低了用户完成任务的总成本？
+多 Agent 是最容易写得像科幻的部分：研究员、写手、审稿人、执行者，一群智能体同时开工。听起来很强，但第一性原理只有一个：它有没有降低你完成任务的总成本？
 
 如果没有，它就是把一个混乱问题拆成多个混乱问题。
 
@@ -1568,7 +1380,7 @@ Host 不是把输出粘在一起。Host 要做四件事：
 - 比冲突：不同结论要摆出来。
 - 做综合：决定采用、拒绝或继续追问。
 
-用户仍然是最终 owner。尤其是发消息、改文件、部署、花钱这些动作，不能让子 Agent 直接完成闭环。
+你仍然是最终 owner。尤其是发消息、改文件、部署、花钱这些动作，不能让子 Agent 直接完成闭环。
 
 ## 一个可用的三 Agent 模板
 
@@ -1576,7 +1388,7 @@ Host 不是把输出粘在一起。Host 要做四件事：
 goal: "评估 HermesAgent 101 的 Day 1 教程是否适合新手"
 agents:
   researcher:
-    job: "阅读教程和素材，列出用户疑惑"
+    job: "阅读教程和素材，列出容易卡住的问题"
     output: "bullets with evidence"
   operator:
     job: "按教程执行命令，记录卡点"
@@ -1635,7 +1447,7 @@ do_not_delegate:
     en: `
 ## Do not use multi-agent because it sounds cool
 
-Multi-agent orchestration is the easiest topic to turn into science fiction: a researcher, writer, reviewer, and operator all working at once. It sounds powerful. From a product perspective, the first-principles question is simpler: does it reduce the total cost of finishing the task?
+Multi-agent orchestration is the easiest topic to turn into science fiction: a researcher, writer, reviewer, and operator all working at once. It sounds powerful. The first-principles question is simpler: does it reduce the total cost of finishing the task?
 
 If not, it only splits one confusing problem into several confusing problems.
 

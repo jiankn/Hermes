@@ -62,7 +62,7 @@ Do not allow yet:
 1. Run `hermes gateway setup`.
 2. Choose one channel, not five.
 3. If QR login or authorization is required, confirm the source before scanning.
-4. Configure allowed users or pairing. Unknown users should not gain control.
+4. Configure allowlisted accounts or pairing. Unknown accounts should not gain control.
 5. Start the gateway with `hermes gateway start`.
 6. Send a read-only message from your phone.
 7. Check gateway status and logs.
@@ -109,34 +109,6 @@ Tomorrow you move from chat to real work: files, data, and reviewable artifacts.
 
 - **[Day 4: Make Hermes handle files and data](/en/tutorials/bootcamp/day-4-data)** - turn messy inputs into usable outputs.
 - **[Automation Recipes](/en/guides/resources/automation-recipes)** - later turn stable requests into scheduled workflows.
-
-## Run It Again From The User Side
-
-On Day 3, the practical question appears: can I reach Hermes from my phone? That is not laziness. Work often happens away from the terminal: on the road, inside a team chat, or two minutes after a meeting ends.
-
-Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The most common messaging failure is not connection failure. It is connecting too broadly: anyone can trigger it, every action is available, and nobody knows where the result was sent.
-
-### Field Checks
-
-- Can a user repeat this step without rereading the chat transcript?
-- Is there a file, log, screenshot, config fragment, or artifact to inspect?
-- When the step fails, does the user know where to stop instead of adding more configuration?
-- Are sensitive data, write permissions, and external delivery handled separately?
-- Could another person continue tomorrow from the artifact you leave today?
-
-### Product Manager Lens
-
-Treat the channel as an entry product, not as a technical badge. It needs an allowlist, session ownership, a default workspace, approval for risky actions, and failure messages a normal user can understand.
-
-From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The test is the full loop from real message to reviewable artifact, not whether a QR code or token handshake succeeded once.
-
-Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
-
-### What Carries Into Tomorrow
-
-Leave with a channel run sheet: platform, allowed users, default directory, attachment rules, blocked actions, log location, and manual takeover path.
-
-Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
 
 <!-- BEGIN beginner-walkthrough -->
 ## Beginner Walkthrough: Connect One Messaging Channel

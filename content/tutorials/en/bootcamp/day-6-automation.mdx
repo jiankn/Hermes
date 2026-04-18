@@ -75,7 +75,7 @@ The key is `summarize_from`. Hermes should summarize from a saved artifact, not 
 
 ## Logs are a product feature
 
-Logs are not developer decoration. They are part of the automation experience. If the morning brief does not arrive, the user should be able to see:
+Logs are not developer decoration. They are part of the automation experience. If the morning brief does not arrive, you should be able to see:
 
 - whether the job started;
 - which inputs were read;
@@ -107,34 +107,6 @@ Tomorrow is multi-agent orchestration. Scheduling solves repetition; multi-agent
 
 - **[Day 7: Multi-agent is division of labor, not group chat](/en/tutorials/bootcamp/day-7-multi-agent)** - split responsibilities, not noise.
 - **[5 AI Workflow Automation Recipes](/en/guides/resources/automation-recipes)** - choose your next scheduled workflow.
-
-## Run It Again From The User Side
-
-On Day 6, users want Hermes to run by itself. That desire is reasonable, but automation is not mainly about saving clicks. It is about handing a proven workflow to time. Without a stable manual workflow, scheduling only makes mistakes arrive on time.
-
-Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The warning signs are clear: inputs change shape every day, nobody reads the output, failures are silent, repeated runs create side effects, or external delivery happens without approval.
-
-### Field Checks
-
-- Can a user repeat this step without rereading the chat transcript?
-- Is there a file, log, screenshot, config fragment, or artifact to inspect?
-- When the step fails, does the user know where to stop instead of adding more configuration?
-- Are sensitive data, write permissions, and external delivery handled separately?
-- Could another person continue tomorrow from the artifact you leave today?
-
-### Product Manager Lens
-
-Design the manual version first, then the scheduled version. A trigger starts the job, but it does not define input quality, permission boundaries, or failure handling for you.
-
-From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The test is three consecutive runs: the same input produces explainable output, failures stop cleanly, and retries do not pollute data.
-
-Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
-
-### What Carries Into Tomorrow
-
-Leave with an automation run card: trigger time, input source, saved snapshot, output location, notification target, failure policy, and pause switch.
-
-Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
 
 <!-- BEGIN beginner-walkthrough -->
 ## Beginner Walkthrough: Hand One Stable Job To The Background

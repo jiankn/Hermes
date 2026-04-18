@@ -3,7 +3,7 @@ title: "Day 1: Make Hermes Run Before You Make It Clever"
 titleZh: "Day 1：先跑起来，再谈聪明"
 slug: "day-1-setup"
 description: "A practical first-day setup guide: choose local or cloud, configure a model, run doctor, and keep secrets out of the chat."
-descriptionZh: "从用户真实启动成本出发，完成本地或云端安装、模型配置、doctor 检查和第一条安全对话。"
+descriptionZh: "从真实启动成本出发，完成本地或云端安装、模型配置、doctor 检查和第一条安全对话。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
@@ -17,7 +17,7 @@ featured: true
 ---
 ## Do not start with every feature
 
-Most Hermes tutorials rush toward the exciting parts: cloud deployment, WeChat or Feishu, Skills, automation, and multi-agent workflows. That is exactly how beginners lose the first hour. The shell says command not found. The model key goes into the wrong file. Windows users mix PowerShell and WSL2. The bot starts once but nobody knows how to start it again tomorrow.
+Most Hermes tutorials rush toward the exciting parts: cloud deployment, WeChat or Feishu, Skills, automation, and multi-agent workflows. That is exactly how beginners lose the first hour. The shell says command not found. The model key goes into the wrong file. On Windows, PowerShell and WSL2 get mixed together. The bot starts once but nobody knows how to start it again tomorrow.
 
 Day 1 has one job: make Hermes run in an environment you understand. Not “installed successfully” in a vague way, but three concrete answers: where is it running, which model endpoint is it using, and what is it allowed to touch?
 
@@ -25,9 +25,9 @@ Day 1 has one job: make Hermes run in an environment you understand. Not “inst
 
 ## Local or cloud is a product decision
 
-From a product manager’s point of view, installation is not a technical preference. It is a usage decision.
+Choose the installation path by usage, not by whatever screenshot a tutorial happens to show.
 
-If you are evaluating Hermes or you care most about privacy, start locally. macOS and Linux can use the terminal directly. Windows users should use WSL2 instead of fighting native path and dependency issues. The goal is to reduce startup friction, not prove that every environment can be forced to work.
+If you are evaluating Hermes or you care most about privacy, start locally. macOS and Linux can use the terminal directly. On Windows, use WSL2 instead of fighting native path and dependency issues. The goal is to reduce startup friction, not prove that every environment can be forced to work.
 
 If you want a 24-hour assistant reachable from your phone, cloud deployment makes sense. That is why so many Chinese walkthroughs lead with “ten-minute cloud setup”: always-on access is the first value ordinary users can feel. But cloud also means you must care about secrets, ports, user permissions, and logs.
 
@@ -67,7 +67,7 @@ Write these rules into your setup note:
 
 ## Where people usually get stuck
 
-- Windows users stay in PowerShell and hit Linux dependency problems. Use WSL2.
+- Staying in PowerShell on Windows and hitting Linux dependency problems. Use WSL2.
 - `hermes` is not found after install. Reload the shell or open a fresh terminal.
 - Users compare model intelligence before confirming the shell works. Pick one model you already have access to.
 - Messaging, cloud, and automation are configured together. Resist that. First prove the CLI.
@@ -94,34 +94,6 @@ Tomorrow is memory. The goal is not to make Hermes remember everything; it is to
 
 - **[Day 2: Treat memory like a product feature](/en/tutorials/bootcamp/day-2-memory)** - save only the facts that reduce future work.
 - **[Privacy Policy](/en/privacy)** - review how this site handles cookies and analytics.
-
-## Run It Again From The User Side
-
-The real Day 1 user is not trying to prove that they can install another tool. They are deciding whether this agent deserves a week of attention. The best start is one repeatable small win: Hermes launches, answers from the right environment, and explains what it is allowed to touch.
-
-Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. If the user installs dependencies, switches models, enables messaging, and edits permissions in the same sitting, every failure looks like one blurry failure called “Hermes is unstable.”
-
-### Field Checks
-
-- Can a user repeat this step without rereading the chat transcript?
-- Is there a file, log, screenshot, config fragment, or artifact to inspect?
-- When the step fails, does the user know where to stop instead of adding more configuration?
-- Are sensitive data, write permissions, and external delivery handled separately?
-- Could another person continue tomorrow from the artifact you leave today?
-
-### Product Manager Lens
-
-Split setup into four checkpoints: environment, model, startup, and boundary. Each checkpoint needs evidence, such as a version output, model name, launch command, or permission note.
-
-From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The review question is not whether the demo was exciting. It is whether another person can repeat the same start path tomorrow.
-
-Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
-
-### What Carries Into Tomorrow
-
-Leave with a startup card: runtime environment, model endpoint, launch command, readable folders, and actions Hermes must never perform without approval.
-
-Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
 
 <!-- BEGIN beginner-walkthrough -->
 ## Beginner Walkthrough: From Zero To First Chat
