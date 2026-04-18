@@ -137,3 +137,86 @@ rollback: "disable schedule and run manually"
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：把一个稳定任务交给后台
+
+自动化不是第一天就写 cron。小白先学会两件事：让 Hermes 在后台跑一个任务，以及让结果回到指定聊天或文件。
+
+![Hermes Agent Day 6 自动化运行卡流程图](/images/bootcamp/beginner-day-6.svg)
+
+### 第 1 步：选一个低风险任务
+
+选择“错了也不会造成损失”的任务，例如：
+
+- 每天整理本地 notes 文件成一页摘要。
+- 每周检查 `~/.hermes/memories` 是否有重复记忆。
+- 每天把固定 RSS/网页内容整理成草稿。
+
+不要第一天自动发群消息、自动删文件、自动创建工单。
+
+### 第 2 步：先手动跑三次
+
+同一个任务，手动发三次，确认输出稳定。比如：
+
+```md
+请读取 hermes-day4/raw/meeting-notes.md，
+生成一页待办摘要，写入 hermes-day6/output/daily-brief.md。
+不要向外发送。
+```
+
+
+### 第 3 步：如果在聊天通道里，先设置 Home Chat
+
+在飞书/Lark 等聊天里发送：
+
+```text
+/set-home
+```
+
+这一步的意义是告诉 Hermes：以后后台任务完成后，默认把结果发回这个聊天窗口。
+
+### 第 4 步：使用后台任务
+
+如果你的版本支持聊天命令，可以使用：
+
+```text
+/background 请整理 hermes-day4/raw/meeting-notes.md，并把结果写到 hermes-day6/output/daily-brief.md，不要对外发送。
+```
+
+后台任务完成后，通常会把结果回传到同一聊天或 Home Chat。第一次先让它写文件，不要让它直接对外发。
+
+### 第 5 步：做运行卡
+
+把任务写成固定卡片：
+
+```yaml
+workflow: "daily-brief"
+manual_runs_passed: 3
+input: "hermes-day4/raw/meeting-notes.md"
+output: "hermes-day6/output/daily-brief.md"
+delivery: "file first, chat later"
+approval_required:
+  - send to group
+  - delete source file
+  - create external ticket
+logs: "~/.hermes/logs/gateway.log"
+```
+
+
+### Day 6 常见卡点
+
+- 后台任务没回消息：检查 Home Chat、gateway 是否运行、日志是否有错误。
+- 每次结果不一样：保存 raw 输入，固定从同一份输入总结。
+- 自动化噪音大：先改摘要格式，不要急着扩大范围。
+- 想上系统级定时：先保证手动和后台任务都稳定，再用系统 cron 或平台调度。
+
+### 今天必须留下的文件
+
+```text
+hermes-day6/
+  output/daily-brief.md
+  run-card.yaml
+  logs/run-001.md
+```
+<!-- END beginner-walkthrough -->

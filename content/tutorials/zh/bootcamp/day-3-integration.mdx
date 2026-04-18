@@ -141,3 +141,106 @@ failure_tests:
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：接入飞书或微信类消息入口
+
+消息通道是 `wechat/` 素材里最详细的一类。小白要记住一个原则：今天只接一个通道，先私聊能用，再考虑群聊和自动通知。
+
+![Hermes Agent Day 3 消息通道配置流程图](/images/bootcamp/beginner-day-3.svg)
+
+### 第 1 步：先升级，再看有没有通道选项
+
+有些通道是新版本才有的。先运行：
+
+```bash
+hermes update
+hermes gateway status || true
+```
+
+如果你的版本里没有某个通道，不要硬找教程截图。先升级，再以你终端里出现的菜单为准。
+
+### 第 2 步：运行 Gateway 配置
+
+主命令通常是：
+
+```bash
+hermes gateway setup
+```
+
+如果你的版本提示使用 `hermes setup gateway`，就按版本提示来。菜单里的数字也可能变化，不要死记“第几个选项”。
+
+### 第 3A 步：飞书/Lark 路线
+
+适合团队办公。按这个顺序做：
+
+1. 打开飞书开放平台，创建一个自建应用。
+2. 启用“机器人”能力。
+3. 申请消息相关权限，尤其是私聊消息和群消息事件。
+4. 复制 App ID、App Secret 等凭证。
+5. 回到终端的 `hermes gateway setup`，选择 Feishu/Lark，按提示粘贴凭证。
+6. 如果终端给出配对链接或授权码，按提示在飞书里完成绑定。
+7. 启动网关并检查状态。
+
+```bash
+hermes gateway start
+hermes gateway status
+tail -f ~/.hermes/logs/gateway.log
+```
+
+飞书验收：私聊机器人发送“请只回复收到”，它能回复；群里 @ 它时，它不会对无关消息乱响应。
+
+### 第 3B 步：微信类路线
+
+适合个人手机入口。先确认你的版本支持对应通道。配置时通常会经历：选择通道、确认扫码、打开授权链接、手机扫码、设置私聊权限、选择是否设为主消息通道。
+
+```bash
+hermes gateway setup
+```
+
+小白注意：扫码链接通常有时效，过期就重新生成。授权后如果手机里暂时没反应，不要急，先回终端继续完成后续向导。
+
+### 第 4 步：第一条安全测试消息
+
+在消息软件里发：
+
+```md
+请只做只读测试，不要修改文件，不要向外发送消息。
+请告诉我：
+1. 你是通过哪个消息通道收到我的消息；
+2. 现在的默认工作目录是什么；
+3. 哪些动作必须先问我。
+```
+
+
+### 第 5 步：设置 Home Chat
+
+如果你后面要让定时任务把结果发回某个聊天窗口，在飞书/Lark 聊天里可以使用类似：
+
+```text
+/set-home
+```
+
+这个动作的含义是：把当前聊天设为通知和定时任务结果的默认回传位置。
+
+### Day 3 常见卡点
+
+- 菜单里没有微信或飞书：版本太旧，先更新。
+- 扫码后没反应：回终端继续完成权限和主通道设置。
+- 机器人不回消息：看 `gateway.log`，确认 gateway 正在运行。
+- 群聊太吵：先关群聊，只保留白名单私聊。
+
+### 今天必须留下的文件
+
+```yaml
+channel: "Feishu / WeChat-style / Telegram / Discord"
+gateway_command: "hermes gateway setup"
+allowed_users:
+  - "your account"
+first_test: "read-only message passed"
+approval_required:
+  - send external message
+  - delete files
+  - deploy services
+```
+<!-- END beginner-walkthrough -->

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f8fafc"/>
+  <rect x="70" y="70" width="1060" height="490" rx="14" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text x="110" y="125" font-size="26" font-weight="700" fill="#4338ca">HermesAgent 101</text>
+  <text x="110" y="165" font-size="40" font-weight="800" fill="#111827">Day 3 Messaging Channel</text>
+  <rect x="110" y="190" width="980" height="52" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="145" cy="216" r="16" fill="#2563eb"/>
+  <text x="145" y="222" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">1</text>
+  <text x="180" y="223" font-size="24" font-weight="650" fill="#111827">Update Hermes</text>  <rect x="110" y="262" width="980" height="52" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="145" cy="288" r="16" fill="#059669"/>
+  <text x="145" y="294" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">2</text>
+  <text x="180" y="295" font-size="24" font-weight="650" fill="#111827">Choose one channel</text>  <rect x="110" y="334" width="980" height="52" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="145" cy="360" r="16" fill="#d97706"/>
+  <text x="145" y="366" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">3</text>
+  <text x="180" y="367" font-size="24" font-weight="650" fill="#111827">Run gateway setup</text>  <rect x="110" y="406" width="980" height="52" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="145" cy="432" r="16" fill="#7c3aed"/>
+  <text x="145" y="438" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">4</text>
+  <text x="180" y="439" font-size="24" font-weight="650" fill="#111827">Authorize user</text>  <rect x="110" y="478" width="980" height="52" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="145" cy="504" r="16" fill="#dc2626"/>
+  <text x="145" y="510" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">5</text>
+  <text x="180" y="511" font-size="24" font-weight="650" fill="#111827">Send safe test</text>
+  <text x="110" y="545" font-size="20" fill="#4b5563">Beginner flow: follow one step, check the expected result, then continue.</text>
+</svg>

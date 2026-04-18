@@ -135,3 +135,74 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with an automation run card: trigger time, input source, saved snapshot, output location, notification target, failure policy, and pause switch.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Hand One Stable Job To The Background
+
+Automation does not start with cron. Beginners first learn to run a background task and send the result to a known place.
+
+![Hermes Agent Day 6 automation run card flow](/images/bootcamp/beginner-day-6.svg)
+
+### Step 1: Pick a low-risk task
+
+- Summarize local notes into one page.
+- Review memory files for duplicates.
+- Turn fixed sources into a draft.
+
+Do not start with group messages, file deletion, or external tickets.
+
+### Step 2: Run manually three times
+
+```md
+Read hermes-day4/raw/meeting-notes.md.
+Write a one-page brief to hermes-day6/output/daily-brief.md.
+Do not send externally.
+```
+
+
+### Step 3: Set home chat if using messaging
+
+```text
+/set-home
+```
+
+
+### Step 4: Use a background task
+
+```text
+/background Summarize hermes-day4/raw/meeting-notes.md and write hermes-day6/output/daily-brief.md. Do not send externally.
+```
+
+
+### Step 5: Create a run card
+
+```yaml
+workflow: "daily-brief"
+manual_runs_passed: 3
+input: "hermes-day4/raw/meeting-notes.md"
+output: "hermes-day6/output/daily-brief.md"
+delivery: "file first, chat later"
+approval_required:
+  - send to group
+  - delete source file
+  - create external ticket
+logs: "~/.hermes/logs/gateway.log"
+```
+
+
+### Common Day 6 problems
+
+- Background task is silent: check home chat, gateway status, and logs.
+- Output changes every run: save raw input and summarize from that artifact.
+- Automation is noisy: improve the format before widening scope.
+- Want OS cron: wait until manual and background runs are stable.
+
+### Leave this folder behind
+
+```text
+hermes-day6/
+  output/daily-brief.md
+  run-card.yaml
+  logs/run-001.md
+```
+<!-- END beginner-walkthrough -->

@@ -122,3 +122,99 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with a startup card: runtime environment, model endpoint, launch command, readable folders, and actions Hermes must never perform without approval.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: From Zero To First Chat
+
+This section is written for someone installing Hermes for the first time. Follow one step, check the expected result, then continue. Do not install Hermes, configure messaging, and compare models at the same time.
+
+![Hermes Agent Day 1 beginner setup flow](/images/bootcamp/beginner-day-1.svg)
+
+### Step 0: Choose the machine
+
+- Windows: install WSL2 first. Run Hermes commands inside Ubuntu/WSL, not PowerShell.
+- macOS: use Terminal.
+- Linux: use your normal shell.
+- Cloud server: log into the server and confirm which user owns the Hermes directory.
+
+### Step 1: Windows installs WSL2 first
+
+Open PowerShell as Administrator and run:
+
+```powershell
+wsl --install
+```
+
+Reboot when prompted. Ubuntu will ask you to create a username and password. The password will not display while typing; that is normal.
+
+### Step 2: Check the base environment
+
+```bash
+pwd
+git --version
+python3 --version
+node --version || true
+```
+
+If Git or Python is missing, fix that first. Do not continue until the shell basics work.
+
+### Step 3: Install Hermes
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+```
+
+Open a fresh terminal and verify:
+
+```bash
+hermes --version
+hermes doctor
+```
+
+Do not ignore doctor output. If doctor fails, fix that before touching models or chat channels.
+
+### Step 4: Configure a model
+
+```bash
+hermes model
+```
+
+Choose a provider and paste the API key into the terminal wizard or config file. Never paste secrets into chat.
+
+### Step 5: Skip messaging today
+
+The setup wizard may offer gateway, Feishu, WeChat-style, Telegram, or Discord channels. Skip them for Day 1. A working CLI makes later gateway debugging much easier.
+
+### Step 6: First safe prompt
+
+```md
+Do not modify files yet.
+Tell me:
+1. which system environment you are running in;
+2. whether a model is configured;
+3. which read-only tasks you can do now;
+4. whether you will ask before deleting files, sending external messages, or deploying services.
+```
+
+Acceptance check: Hermes should explain the environment, model, and boundary. If it asks for more permissions, stop.
+
+### Common Day 1 problems
+
+- `command not found: hermes`: open a new terminal or run `source ~/.bashrc`.
+- Linux commands fail in PowerShell: switch to Ubuntu/WSL.
+- GitHub download is slow: change network or download the installer manually.
+- Model returns 401/403: key, quota, or provider selection is wrong.
+
+### Leave this file behind
+
+```yaml
+where_it_runs: "WSL2 / Mac / Linux / cloud VM"
+start_command: "hermes"
+doctor_status: "passed / failed with reason"
+model_provider: "your provider"
+do_not_do_yet:
+  - connect messaging channel
+  - delete files
+  - deploy services
+```
+<!-- END beginner-walkthrough -->

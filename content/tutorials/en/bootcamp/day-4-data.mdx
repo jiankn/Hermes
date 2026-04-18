@@ -160,3 +160,76 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with a data bench spec: folder structure, naming rules, output schema, low-confidence markers, and a human review checklist.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Process One Real File
+
+Do not start with a folder full of documents. Use one meeting note, CSV, or web snippet and run the full input-to-output loop.
+
+![Hermes Agent Day 4 file and data bench flow](/images/bootcamp/beginner-day-4.svg)
+
+### Step 1: Create a safe workbench
+
+```bash
+mkdir -p hermes-day4/raw hermes-day4/working hermes-day4/output hermes-day4/logs
+touch hermes-day4/notes.md
+```
+
+Put original files in `raw/`. Do not let Hermes modify originals.
+
+### Step 2: Prepare a small input
+
+```bash
+cat > hermes-day4/raw/meeting-notes.md <<EOF
+Project meeting:
+- Alice will prepare deployment docs by Friday.
+- Bob will inspect gateway logs next Monday.
+- Do not share model keys in group chat.
+EOF
+```
+
+
+### Step 3: Ask for schema first
+
+```md
+Read only hermes-day4/raw/meeting-notes.md.
+Do not modify the original file.
+First design a JSON schema for tasks, owner, deadline, source quote, and uncertainty.
+After the schema is confirmed, write hermes-day4/output/tasks.json.
+```
+
+
+### Step 4: Review output
+
+- Does every task have a source quote?
+- Are uncertain deadlines marked unknown?
+- Did Hermes invent an owner?
+- Did it leave raw files untouched?
+
+### Step 5: Write a log
+
+```md
+Write hermes-day4/logs/run-001.md with:
+- input file
+- output file
+- uncertain fields
+- items requiring human review
+```
+
+
+### Common Day 4 problems
+
+- Hermes summarizes without writing a file: specify output path.
+- No evidence: require `source_quote`.
+- File is too large: test with a slice first.
+- Table extraction is messy: identify fields before converting.
+
+### Leave this folder behind
+
+```text
+hermes-day4/
+  raw/meeting-notes.md
+  output/tasks.json
+  logs/run-001.md
+```
+<!-- END beginner-walkthrough -->

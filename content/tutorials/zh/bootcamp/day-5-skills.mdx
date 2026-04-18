@@ -154,3 +154,95 @@ test_cases: 3
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：把 Day4 流程做成 Skill
+
+Skill 可以理解为“给 Hermes 的操作说明书”。不是高级 prompt，也不是神秘插件。你今天只做一个最小 Skill：把会议纪要提取待办。
+
+![Hermes Agent Day 5 Skill 创建流程图](/images/bootcamp/beginner-day-5.svg)
+
+### 第 1 步：先看已有 Skill
+
+```bash
+hermes skills list || true
+hermes skills search meeting || true
+```
+
+如果命令不可用，不影响今天学习。你仍然可以手写一个 `SKILL.md`。
+
+### 第 2 步：创建本地 Skill 草稿
+
+```bash
+mkdir -p hermes-day5-skills/meeting-action-extractor
+touch hermes-day5-skills/meeting-action-extractor/SKILL.md
+```
+
+
+### 第 3 步：写 SKILL.md
+
+把下面内容写进去，再按你的项目微调：
+
+```md
+# meeting-action-extractor
+
+When to use:
+- Use this when the user provides meeting notes and wants tasks.
+
+Inputs:
+- Markdown, plain text, transcript, or copied meeting notes.
+
+Steps:
+1. Read the source material.
+2. Extract action items only.
+3. For each item, keep owner, deadline, source quote, confidence, and needs_review.
+4. Mark missing owner or deadline as unknown.
+5. Ask before sending tasks to external tools.
+
+Output:
+- JSON or Markdown task list.
+
+Do not:
+- Invent owners.
+- Invent dates.
+- Send anything externally without approval.
+```
+
+
+### 第 4 步：用 3 个样本测试
+
+准备三个输入：一个格式清楚、一个缺负责人、一个缺截止时间。让 Hermes 分别调用这个 Skill。你可以直接说：
+
+```md
+请按照 meeting-action-extractor 这个 Skill 的步骤处理下面的会议纪要。
+```
+
+验收标准：缺失字段要标 unknown，不能编造。
+
+### 第 5 步：记录失败案例
+
+如果 Hermes 没调用 Skill，不要骂模型，先补触发条件。比如在记忆里写：
+
+```md
+遇到“会议纪要转待办”“从会议记录提取任务”这类需求时，优先使用 meeting-action-extractor Skill。
+```
+
+
+### Day 5 常见卡点
+
+- Skill 写得太抽象：补输入、步骤、输出样例。
+- Skill 不触发：触发词不清楚，手动点名调用一次。
+- Skill 权限过大：提取待办只需要读输入、写 output，不需要发外部消息。
+- 社区 Skill 不放心：先读 `SKILL.md`，再决定是否安装。
+
+### 今天必须留下的文件
+
+```yaml
+skill_name: "meeting-action-extractor"
+trigger_examples:
+  - "会议纪要转待办"
+  - "提取会议任务"
+test_cases: 3
+permission_level: "read input, write output, approval before external send"
+```
+<!-- END beginner-walkthrough -->

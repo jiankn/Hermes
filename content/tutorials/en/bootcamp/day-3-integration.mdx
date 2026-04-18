@@ -137,3 +137,95 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with a channel run sheet: platform, allowed users, default directory, attachment rules, blocked actions, log location, and manual takeover path.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Connect One Messaging Channel
+
+Messaging setup is where many field notes become detailed. The beginner rule is simple: connect one channel, prove private chat works, then consider groups or scheduled notifications.
+
+![Hermes Agent Day 3 messaging setup flow](/images/bootcamp/beginner-day-3.svg)
+
+### Step 1: Update first
+
+```bash
+hermes update
+hermes gateway status || true
+```
+
+If a channel is missing, do not chase old screenshots. Upgrade first and trust the menu shown by your version.
+
+### Step 2: Run gateway setup
+
+```bash
+hermes gateway setup
+```
+
+If your version says `hermes setup gateway`, follow your version. Menu numbers can change.
+
+### Step 3A: Feishu/Lark path
+
+1. Create an app in the Feishu developer console.
+2. Enable bot capability.
+3. Request message permissions and event subscriptions.
+4. Copy App ID and App Secret.
+5. Choose Feishu/Lark in gateway setup and paste credentials.
+6. Complete pairing with link or auth code if prompted.
+7. Start and check the gateway.
+
+```bash
+hermes gateway start
+hermes gateway status
+tail -f ~/.hermes/logs/gateway.log
+```
+
+
+### Step 3B: WeChat-style path
+
+Confirm that your version supports the channel. The usual flow is: choose channel, confirm login, open authorization link, scan from phone, choose private-chat policy, then set the main channel if needed.
+
+```bash
+hermes gateway setup
+```
+
+If the QR or authorization link expires, regenerate it. If phone chat does not respond yet, return to the terminal and finish the wizard.
+
+### Step 4: First safe message
+
+```md
+Do only a read-only test. Do not modify files or send external messages.
+Tell me:
+1. which channel received this message;
+2. what the default workspace is;
+3. which actions require my approval.
+```
+
+
+### Step 5: Set the home chat
+
+```text
+/set-home
+```
+
+Use this when the current chat should receive future notifications and scheduled task results.
+
+### Common Day 3 problems
+
+- Channel is missing: update Hermes.
+- Scan succeeds but no response: finish the terminal wizard.
+- Bot is silent: inspect `gateway.log`.
+- Group chat is noisy: disable groups and keep private allowlisted chat first.
+
+### Leave this file behind
+
+```yaml
+channel: "Feishu / WeChat-style / Telegram / Discord"
+gateway_command: "hermes gateway setup"
+allowed_users:
+  - "your account"
+first_test: "read-only message passed"
+approval_required:
+  - send external message
+  - delete files
+  - deploy services
+```
+<!-- END beginner-walkthrough -->

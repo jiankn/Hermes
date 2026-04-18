@@ -162,3 +162,85 @@ validation:
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：让 Hermes 处理一份真实文件
+
+今天不要一上来处理一堆文件。你只拿一份会议纪要、一个 CSV 或一段网页内容，做一次完整的“输入到输出”流程。
+
+![Hermes Agent Day 4 文件数据工作台流程图](/images/bootcamp/beginner-day-4.svg)
+
+### 第 1 步：建一个不会污染项目的工作台
+
+```bash
+mkdir -p hermes-day4/raw hermes-day4/working hermes-day4/output hermes-day4/logs
+touch hermes-day4/notes.md
+```
+
+把原始文件放进 `raw/`。不要直接让 Hermes 改原文件。
+
+### 第 2 步：准备一个小输入
+
+如果你没有真实材料，就先建一个测试文件：
+
+```bash
+cat > hermes-day4/raw/meeting-notes.md <<EOF
+项目例会：
+- 张三负责周五前整理部署文档。
+- 李四下周一检查 gateway 日志。
+- 模型 Key 暂时不要发到群里。
+EOF
+```
+
+
+### 第 3 步：先让 Hermes 设计输出格式
+
+把下面这段发给 Hermes：
+
+```md
+请只读取 hermes-day4/raw/meeting-notes.md。
+不要修改原文件。
+请先设计一个 JSON 输出 schema，用来提取任务、负责人、截止时间、来源句子和不确定项。
+schema 确认后，再写入 hermes-day4/output/tasks.json。
+```
+
+小白重点：先确认 schema，再让它输出。否则它会给你一段漂亮总结，但你很难复查。
+
+### 第 4 步：检查输出
+
+输出后你要看四件事：
+
+- 是否每个任务都有来源句子。
+- 不确定截止时间有没有标记为 unknown。
+- 是否编造了负责人。
+- 是否改动了 raw 目录。
+
+### 第 5 步：让 Hermes 写日志
+
+继续发：
+
+```md
+请在 hermes-day4/logs/run-001.md 记录这次处理：
+- 输入文件
+- 输出文件
+- 你不确定的字段
+- 需要人工确认的地方
+```
+
+
+### Day 4 常见卡点
+
+- Hermes 直接总结不落文件：明确要求写入 output 路径。
+- 输出没有来源：要求 source_quote 字段。
+- 文件太大：先切一小段测试，别第一次就丢整本 PDF。
+- 中文表格乱：先让它识别字段，再让它转结构化数据。
+
+### 今天必须留下的文件
+
+```text
+hermes-day4/
+  raw/meeting-notes.md
+  output/tasks.json
+  logs/run-001.md
+```
+<!-- END beginner-walkthrough -->

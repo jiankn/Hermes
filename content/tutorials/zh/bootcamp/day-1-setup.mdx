@@ -124,3 +124,111 @@ first_boundary:
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：从零装到能对话
+
+这一节按“第一次接触 Hermes 的普通用户”来写。你不需要先理解所有概念，只要按顺序做，每做完一步就检查一次结果。不要跳步，尤其不要一边装 Hermes、一边配微信、一边换模型。
+
+![Hermes Agent Day 1 小白安装流程图](/images/bootcamp/beginner-day-1.svg)
+
+### 第 0 步：先判断你在哪台机器上装
+
+- Windows 用户：先装 WSL2。以后所有 Hermes 命令都在 Ubuntu/WSL 终端里输入，不是在 PowerShell 里输入。
+- Mac 用户：打开“终端”。
+- Linux 用户：打开你平时用的 shell。
+- 云服务器用户：先登录服务器终端，再确认当前用户是谁、Hermes 要装在哪个用户目录下。
+
+### 第 1 步：Windows 先装 WSL2
+
+以管理员身份打开 PowerShell，只做这一条：
+
+```powershell
+wsl --install
+```
+
+执行完按提示重启电脑。重启后会出现 Ubuntu 终端，让你创建用户名和密码。密码输入时不会显示，这是正常现象；输完回车即可。
+
+检查点：你应该能打开 Ubuntu/WSL 终端，并看到类似 `user@computer:~$` 的提示符。看不到这个，就不要继续装 Hermes。
+
+### 第 2 步：检查基础环境
+
+在 Mac/Linux/WSL 终端里运行：
+
+```bash
+pwd
+git --version
+python3 --version
+node --version || true
+```
+
+如果 `git` 或 `python3` 找不到，先安装系统依赖。小白不要急着搜一堆教程，先把报错完整复制给 AI，让它按你的系统给出安装命令。
+
+### 第 3 步：一键安装 Hermes
+
+优先使用官方安装脚本：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+```
+
+安装结束后，关闭当前终端，重新打开一个新的终端，再检查 Hermes 命令是否可用：
+
+```bash
+hermes --version
+hermes doctor
+```
+
+检查点：`hermes doctor` 会告诉你环境哪里还不对。不要忽略它。只要 doctor 没过，后面的模型、飞书、微信都先别配。
+
+### 第 4 步：配置模型
+
+Hermes 本体不是模型服务，你还需要一个模型供应商和 API Key。第一次建议用交互式向导：
+
+```bash
+hermes model
+```
+
+按界面选择提供商、模型名，并粘贴 API Key。小白注意：API Key 只粘到终端向导或配置文件里，不要发到聊天窗口里。
+
+如果你看到模型列表但不知道选哪个，先选你已经有 Key 的那个。第一天不要比较模型智商，先把链路跑通。
+
+### 第 5 步：先跳过消息通道
+
+配置向导可能会问你要不要设置 gateway、飞书、微信、Telegram 等通道。第一天建议先跳过。原因很简单：CLI 没跑通之前，消息通道出错时你不知道是模型问题、网关问题还是授权问题。
+
+### 第 6 步：发第一条安全测试
+
+运行 Hermes，然后发送这条：
+
+```md
+请先不要修改任何文件。
+请告诉我：
+1. 你当前运行在哪个系统环境里；
+2. 当前是否已经配置模型；
+3. 你现在能做哪些只读任务；
+4. 删除文件、发外部消息、部署服务前是否会先问我。
+```
+
+验收标准：Hermes 能说清运行环境、模型配置和权限边界。只要它开始让你授权更多工具，先停下来，Day 1 不做。
+
+### Day 1 常见卡点
+
+- `command not found: hermes`：重新打开终端，或运行 `source ~/.bashrc` 后再试。
+- Windows PowerShell 里跑 Linux 命令失败：切到 Ubuntu/WSL 终端。
+- GitHub 下载慢：换网络或先手动下载 install.sh，再在本地执行。
+- 模型报 401/403：API Key 错了、额度没开、供应商选错，先回到 `hermes model` 重配。
+
+### 今天必须留下的文件
+
+```yaml
+where_it_runs: "WSL2 / Mac / Linux / cloud VM"
+start_command: "hermes"
+doctor_status: "passed / failed with reason"
+model_provider: "your provider"
+do_not_do_yet:
+  - connect messaging channel
+  - delete files
+  - deploy services
+```
+<!-- END beginner-walkthrough -->

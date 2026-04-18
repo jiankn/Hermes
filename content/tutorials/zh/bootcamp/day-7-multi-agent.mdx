@@ -147,3 +147,101 @@ do_not_delegate:
 不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
 
 再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
+
+<!-- BEGIN beginner-walkthrough -->
+## 小白手把手：第一次做多 Agent 分工
+
+多 Agent 不等于开一堆聊天窗口。小白第一次只做一个简单分工：一个负责查资料，一个负责执行，一个负责检查，最后由你决定。
+
+![Hermes Agent Day 7 多 Agent 交接流程图](/images/bootcamp/beginner-day-7.svg)
+
+### 第 1 步：先写目标，不要先建 Agent
+
+```md
+目标：检查 Day1 教程是否适合完全没有命令行基础的新手。
+最终产物：一份修改建议清单，不自动改文件。
+```
+
+
+### 第 2 步：拆三个角色
+
+```yaml
+researcher:
+  job: "阅读教程，列出小白看不懂的词"
+  output: "疑惑清单 + 所在段落"
+operator:
+  job: "按步骤模拟执行，记录卡点"
+  output: "通过/失败/需要补图"
+reviewer:
+  job: "检查权限、密钥、危险动作"
+  output: "风险等级 + 修改建议"
+owner: "human"
+```
+
+
+### 第 3 步：统一交接格式
+
+每个 Agent 都必须按同一格式交付：
+
+```md
+Findings:
+- 问题是什么
+
+Evidence:
+- 来自哪一段/哪一步
+
+Suggested change:
+- 建议怎么改
+
+Confidence:
+- high / medium / low
+```
+
+
+### 第 4 步：能用 Profile 就先隔离
+
+如果你要做实验，不想污染主配置，可以用独立 HOME 路径运行。不同版本命令可能不同，一个通用思路是：
+
+```bash
+HERMES_HOME=~/.hermes-day7-research hermes
+```
+
+这样研究用的记忆、配置和技能不会直接混进你的主环境。小白如果不确定，就先只在主会话里做文字分工，不要动配置。
+
+### 第 5 步：最后由人合并
+
+让 Hermes 汇总时明确说：
+
+```md
+请合并 researcher/operator/reviewer 的结论。
+不要直接改文件。
+先输出：必须改、建议改、暂不改 三类清单。
+```
+
+
+### Day 7 常见卡点
+
+- 三个 Agent 做了同一件事：角色没拆清。
+- 输出很多但不能用：没有统一交接格式。
+- 子 Agent 直接改文件：高风险动作没有收回给人。
+- 并行反而更慢：任务之间其实互相依赖，不适合多 Agent。
+
+### 今天必须留下的文件
+
+```yaml
+task: "review beginner tutorial"
+roles:
+  - researcher
+  - operator
+  - reviewer
+handoff_format:
+  - findings
+  - evidence
+  - suggested_change
+  - confidence
+human_approval_required:
+  - edit files
+  - publish
+  - push to GitHub
+```
+<!-- END beginner-walkthrough -->

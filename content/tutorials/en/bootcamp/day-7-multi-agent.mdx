@@ -145,3 +145,95 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with an orchestration blueprint: roles, inputs, blocked actions, deliverables, merge order, and human decision points.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Your First Multi-Agent Split
+
+Multi-agent work is not opening many chats. For the first run, use three roles: one researches, one simulates execution, one reviews risk, and you decide.
+
+![Hermes Agent Day 7 multi-agent handoff flow](/images/bootcamp/beginner-day-7.svg)
+
+### Step 1: Define the goal first
+
+```md
+Goal: check whether the Day 1 tutorial works for a complete command-line beginner.
+Final artifact: suggested edits only, no automatic file changes.
+```
+
+
+### Step 2: Split three roles
+
+```yaml
+researcher:
+  job: "list confusing terms"
+  output: "questions + section"
+operator:
+  job: "simulate the steps and record friction"
+  output: "passed / failed / needs image"
+reviewer:
+  job: "check permissions, secrets, and risky actions"
+  output: "severity + suggested fix"
+owner: "human"
+```
+
+
+### Step 3: Use one handoff format
+
+```md
+Findings:
+- what is wrong
+
+Evidence:
+- section or step
+
+Suggested change:
+- proposed edit
+
+Confidence:
+- high / medium / low
+```
+
+
+### Step 4: Isolate with a separate home when experimenting
+
+```bash
+HERMES_HOME=~/.hermes-day7-research hermes
+```
+
+If you are not sure, keep it as text-only delegation in the main session and do not change configuration.
+
+### Step 5: Human merges
+
+```md
+Merge researcher/operator/reviewer results.
+Do not edit files yet.
+Return three lists: must change, should change, do not change yet.
+```
+
+
+### Common Day 7 problems
+
+- Every agent does the same task: roles are unclear.
+- Output is long but unusable: no shared handoff format.
+- Sub-agent edits files directly: risky actions were not reserved for the human.
+- Parallelism is slower: tasks actually depend on each other.
+
+### Leave this file behind
+
+```yaml
+task: "review beginner tutorial"
+roles:
+  - researcher
+  - operator
+  - reviewer
+handoff_format:
+  - findings
+  - evidence
+  - suggested_change
+  - confidence
+human_approval_required:
+  - edit files
+  - publish
+  - push to GitHub
+```
+<!-- END beginner-walkthrough -->

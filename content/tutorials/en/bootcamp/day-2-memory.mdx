@@ -145,3 +145,73 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with a memory contract: stable preferences, project facts, privacy exclusions, expiry rules, and the deletion path.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Make Memory Visible
+
+Do not mystify memory. Today you only need to find where memory lives, save one durable preference, and verify it in a new session.
+
+![Hermes Agent Day 2 memory setup flow](/images/bootcamp/beginner-day-2.svg)
+
+### Step 1: Find the memory folder
+
+```bash
+ls ~/.hermes
+ls ~/.hermes/memories || true
+```
+
+Look for files such as `MEMORY.md` and `USER.md`. Directory names may differ by version.
+
+### Step 2: Split user preference and environment facts
+
+- `USER.md`: communication preferences.
+- `MEMORY.md`: environment facts and project rules.
+
+Temporary tasks should not become long-term memory. “Ask before deleting files” is durable. “Only inspect Day 1 today” is not.
+
+### Step 3: Add one memory
+
+```bash
+hermes memory add "Use Chinese by default unless I ask for English."
+hermes memory add "Ask before deleting, overwriting, or moving files."
+hermes memory status
+```
+
+If your version does not support these commands, edit the Markdown memory file directly.
+
+### Step 4: Restart and test
+
+```md
+Tell me which long-term preferences you remember.
+Separate user preferences from project rules.
+```
+
+Acceptance check: Hermes should recall the saved preferences and not invent identity or project facts.
+
+### Step 5: Practice deletion
+
+```bash
+hermes memory add "Temporary note for today only."
+hermes memory remove "Temporary note for today only."
+```
+
+
+### Common Day 2 problems
+
+- Memory is not visible: start a truly new session.
+- Memory gets noisy: clean it weekly and merge duplicates.
+- Session search is confused with memory: history is searchable, durable preferences belong in memory.
+
+### Leave this file behind
+
+```yaml
+user_preferences:
+  - "Chinese by default"
+safety_memory:
+  - "ask before deleting or overwriting files"
+do_not_remember:
+  - "verification codes"
+  - "temporary links"
+restart_test: "passed / needs cleanup"
+```
+<!-- END beginner-walkthrough -->

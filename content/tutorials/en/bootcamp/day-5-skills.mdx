@@ -152,3 +152,92 @@ Good training material should still be useful when the user fails. Even if the w
 Leave with a skill candidate card: trigger scenario, input checklist, steps, output sample, permission level, and retirement condition.
 
 Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.
+
+<!-- BEGIN beginner-walkthrough -->
+## Beginner Walkthrough: Turn Day 4 Into A Skill
+
+A Skill is an operating manual for Hermes. Today you create one minimal Skill: extract action items from meeting notes.
+
+![Hermes Agent Day 5 skill creation flow](/images/bootcamp/beginner-day-5.svg)
+
+### Step 1: Inspect existing Skills
+
+```bash
+hermes skills list || true
+hermes skills search meeting || true
+```
+
+If these commands are unavailable, you can still write a `SKILL.md` manually.
+
+### Step 2: Create a draft folder
+
+```bash
+mkdir -p hermes-day5-skills/meeting-action-extractor
+touch hermes-day5-skills/meeting-action-extractor/SKILL.md
+```
+
+
+### Step 3: Write SKILL.md
+
+```md
+# meeting-action-extractor
+
+When to use:
+- Use this when the user provides meeting notes and wants tasks.
+
+Inputs:
+- Markdown, plain text, transcript, or copied meeting notes.
+
+Steps:
+1. Read the source material.
+2. Extract action items only.
+3. Keep owner, deadline, source quote, confidence, and needs_review.
+4. Mark missing owner or deadline as unknown.
+5. Ask before sending tasks to external tools.
+
+Output:
+- JSON or Markdown task list.
+
+Do not:
+- Invent owners.
+- Invent dates.
+- Send externally without approval.
+```
+
+
+### Step 4: Test three samples
+
+Use one clean input, one missing owner, and one missing deadline. Ask:
+
+```md
+Follow the meeting-action-extractor Skill for the notes below.
+```
+
+
+### Step 5: Record failure cases
+
+If Hermes does not use the Skill, improve the trigger wording and add a memory hint.
+
+```md
+When the user asks for meeting notes to become tasks, prefer the meeting-action-extractor Skill.
+```
+
+
+### Common Day 5 problems
+
+- Skill is too vague: add inputs, steps, and output examples.
+- Skill does not trigger: call it explicitly once.
+- Permission is too broad: read input and write output only.
+- Community Skill is suspicious: read `SKILL.md` before installing.
+
+### Leave this file behind
+
+```yaml
+skill_name: "meeting-action-extractor"
+trigger_examples:
+  - "meeting notes to tasks"
+  - "extract action items"
+test_cases: 3
+permission_level: "read input, write output, approval before external send"
+```
+<!-- END beginner-walkthrough -->
